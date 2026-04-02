@@ -21,9 +21,9 @@ export default async function PostPage({
         <h1>{post.title}</h1>
         <time>{new Date(post.createdAt).toLocaleDateString()}</time>
       </header>
-      <div className="prose">
+      <div className="prose prose-invert prose-headings:font-serif prose-code:text-[#c8ff57] max-w-none">
         <ReactMarkdown>{post.content}</ReactMarkdown>
-      </div>
+    </div>
     </article>
   )
 }
