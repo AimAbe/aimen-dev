@@ -1,13 +1,34 @@
 import { prisma } from '@/lib/db'
+import { auth } from '@/lib/auth'
 
 export async function GET(
   _req: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ) {
+  const { slug } = await params
   const post = await prisma.post.findUnique({
-    where: { slug: params.slug, published: true }
+    where: { slug }   // removed published: true so drafts load in editor
   })
 
   if (!post) return new Response('Not found', { status: 404 })
   return Response.json(post)
+}
+
+export async function PATCH(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const session = await auth()
+  if (!session) return new Response('Unauthorized', { status: 401 })
+
+  const { slug } = await params
+  const body = await req.json()
+  const post = await prisma.post.update({ where: { slug }, data: body })
+  return Response.json(post)
+}
+
+export async function DELETE(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
+  const session = await auth()
+  if (!session) return new Response('Unauthorized', { status: 401 })
+
+  const { slug } = await params
+  await prisma.post.delete({ where: { slug } })
+  return new Response(null, { status: 204 })
 }
