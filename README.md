@@ -120,7 +120,7 @@ Visit:
 |------|-------------|--------|
 | 1 | Next.js + Prisma + Railway setup | ✅ Done |
 | 2 | Posts API + blog pages + Markdown rendering | ✅ Done |
-| 3 | Auth + admin editor + Vercel deploy | 🔄 In progress |
+| 3 | Auth + admin editor | ✅ Done |
 | 4 | Emoji reactions | ⏳ Pending |
 | 5 | Comments + moderation | ⏳ Pending |
 | 6 | Newsletter + double opt-in | ⏳ Pending |
