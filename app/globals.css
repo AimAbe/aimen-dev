@@ -1,37 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@config "../tailwind.config.js";
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer base {
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+  }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  ::selection {
+    @apply bg-accent text-bg;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  ::-webkit-scrollbar {
+    @apply w-2;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-bg;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border-hover rounded-full;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-.post-card {
-  background: #0c0c0f;
-  padding: 28px 32px;
-  cursor: pointer;
-  transition: background 0.2s;
+@layer components {
+  .prose {
+    @apply text-text leading-relaxed max-w-none;
+  }
+  .prose h1 {
+    @apply text-3xl font-bold mt-12 mb-4 text-text;
+  }
+  .prose h2 {
+    @apply text-2xl font-bold mt-10 mb-3 text-text;
+  }
+  .prose h3 {
+    @apply text-xl font-semibold mt-8 mb-2 text-text;
+  }
+  .prose p {
+    @apply mb-5 text-text-muted leading-7;
+  }
+  .prose a {
+    @apply text-accent underline underline-offset-4 decoration-accent/30 hover:decoration-accent transition-colors;
+  }
+  .prose strong {
+    @apply text-text font-semibold;
+  }
+  .prose ul {
+    @apply list-disc pl-6 mb-5 space-y-1 text-text-muted;
+  }
+  .prose ol {
+    @apply list-decimal pl-6 mb-5 space-y-1 text-text-muted;
+  }
+  .prose blockquote {
+    @apply border-l-2 border-accent pl-4 italic text-text-muted my-6;
+  }
+  .prose code {
+    @apply font-mono text-sm bg-bg-card text-accent px-1.5 py-0.5 rounded;
+  }
+  .prose pre {
+    @apply bg-bg-card border border-border rounded-lg p-4 my-6 overflow-x-auto;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0 text-text-muted;
+  }
+  .prose img {
+    @apply rounded-lg border border-border my-6;
+  }
+  .prose hr {
+    @apply border-border my-10;
+  }
+  .prose table {
+    @apply w-full border-collapse my-6;
+  }
+  .prose th {
+    @apply text-left text-xs uppercase tracking-wider text-text-dim border-b border-border pb-2 font-semibold;
+  }
+  .prose td {
+    @apply text-sm text-text-muted border-b border-border py-2;
+  }
 }
 
-.post-card:hover {
-  background: #13131a;
+@layer components {
+  .tag {
+    @apply inline-block text-xs font-mono font-medium bg-accent-muted text-accent px-2.5 py-1 rounded-full border border-accent/20;
+  }
 }
