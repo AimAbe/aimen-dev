@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import ReactMarkdown from 'react-markdown'
 import Layout from '@/app/components/Layout'
+import Reactions from '@/app/components/Reactions'
 
 const TAG_COLORS: Record<string, { bg: string; color: string }> = {
   'build log': { bg: 'rgba(200,255,87,0.1)', color: '#c8ff57' },
@@ -16,10 +17,18 @@ export default async function PostPage({
 }) {
   const { slug } = await params
   const post = await prisma.post.findUnique({
-    where: { slug, published: true }
+    where: { slug },
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      tag: true,
+      createdAt: true,
+      published: true
+    }
   })
 
-  if (!post) notFound()
+  if (!post || !post.published) notFound()
 
   const { bg, color } = TAG_COLORS[post.tag?.toLowerCase() ?? ''] ?? { bg: 'rgba(107,104,128,0.15)', color: '#6b6880' }
 
@@ -62,6 +71,8 @@ export default async function PostPage({
         <div className="prose prose-invert prose-headings:font-serif prose-code:text-[#c8ff57] max-w-none">
           <ReactMarkdown>{post.content}</ReactMarkdown>
         </div>
+
+        <Reactions postId={post.id} />  {/* ← Add here */}
 
       </div>
     </Layout>

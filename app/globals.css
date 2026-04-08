@@ -25,3 +25,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.post-card {
+  background: #0c0c0f;
+  padding: 28px 32px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.post-card:hover {
+  background: #13131a;
+}
