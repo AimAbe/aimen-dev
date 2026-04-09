@@ -1,8 +1,6 @@
 # aimen.dev
 
-Personal developer blog documenting my journey learning fullstack development. The blog itself is the subject of its own posts — every build decision, error, and fix gets written up honestly.
-
-Live at [aimen.dev](https://aimen.dev) *(coming soon)*
+Personal developer blog built with Next.js, Prisma, and GitHub-authenticated admin tools. The site documents learning and fullstack experiments while serving as a real content platform with markdown posts, reactions, and comment moderation.
 
 ---
 
@@ -11,23 +9,23 @@ Live at [aimen.dev](https://aimen.dev) *(coming soon)*
 | Layer | Technology |
 |-------|-----------|
 | Framework | Next.js 16 (App Router) |
-| Database | PostgreSQL on Railway |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 + Typography |
+| Database | PostgreSQL |
 | ORM | Prisma |
 | Auth | NextAuth.js (GitHub OAuth) |
-| Email | Resend |
-| Styling | Tailwind CSS v4 + Typography |
-| Deployment | Vercel |
+| Rendering | `react-markdown` |
 
 ---
 
 ## Features
 
-- **Blog** — Markdown posts stored in Postgres, rendered with `react-markdown`
-- **CMS** — Admin editor for writing and publishing posts *(Step 3)*
-- **Comments** — Reader comments with moderation queue *(Step 5)*
-- **Reactions** — Emoji reactions, no login required *(Step 4)*
-- **Newsletter** — Double opt-in subscriber list *(Step 6)*
-- **Auth** — GitHub OAuth locked to admin email only *(Step 3)*
+- Public blog listing with search
+- Markdown blog posts rendered with `react-markdown`
+- Emoji reactions persisted per browser session
+- Comments with moderation workflow
+- Admin dashboard for creating, editing, and publishing posts
+- GitHub login restricted to a configured admin email
 
 ---
 
@@ -36,22 +34,43 @@ Live at [aimen.dev](https://aimen.dev) *(coming soon)*
 ```
 aimen-dev/
 ├── app/
-│   ├── blog/
-│   │   ├── page.tsx              # Post listing
-│   │   └── [slug]/page.tsx       # Individual post
-│   ├── admin/                    # Coming in Step 3
+│   ├── admin/
+│   │   ├── comments/page.tsx
+│   │   ├── edit/[slug]/page.tsx
+│   │   ├── new/page.tsx
+│   │   └── page.tsx
 │   ├── api/
-│   │   ├── posts/route.ts        # GET all, POST new
-│   │   └── posts/[slug]/route.ts # GET single
+│   │   ├── auth/[...nextauth]/route.ts
+│   │   ├── comments/route.ts
+│   │   ├── posts/route.ts
+│   │   ├── posts/[slug]/route.ts
+│   │   ├── reactions/route.ts
+│   │   └── search/route.ts
+│   ├── blog/
+│   │   ├── [slug]/page.tsx
+│   │   └── page.tsx
+│   ├── login/page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
+├── app/components/
+│   ├── CommentForm.tsx
+│   ├── CommentsDisplay.tsx
+│   ├── Layout.tsx
+│   ├── ModerationClient.tsx
+│   ├── PostNav.tsx
+│   ├── Reactions.tsx
+│   └── Search.tsx
+├── lib/
+│   ├── auth.ts
+│   ├── db.ts
+│   └── getAdjacentPosts.ts
 ├── prisma/
 │   ├── schema.prisma
 │   └── seed.ts
-├── lib/
-│   └── db.ts                     # Prisma singleton
-└── .env.example
+├── package.json
+├── README.md
+└── tsconfig.json
 ```
 
 ---
@@ -61,42 +80,32 @@ aimen-dev/
 ### Prerequisites
 
 - Node.js 18+
-- A [Railway](https://railway.app) account (for Postgres)
-- A [Vercel](https://vercel.com) account (for deployment)
+- PostgreSQL database
 
 ### Setup
 
 ```bash
-# Clone the repo
 git clone https://github.com/YOUR_USERNAME/aimen-dev.git
 cd aimen-dev
-
-# Install dependencies (also runs prisma generate via postinstall)
 npm install
-
-# Copy env example and fill in your values
-cp .env.example .env
 ```
 
 ### Environment Variables
 
+Create a `.env` file in the project root with:
+
 ```bash
-DATABASE_URL=        # Railway Postgres connection string
-ADMIN_EMAIL=         # Your email — only this account can log in
-AUTH_SECRET=         # Random string: openssl rand -base64 32
-RESEND_API_KEY=      # From resend.com
+DATABASE_URL=your_postgres_connection_string
+ADMIN_EMAIL=your_admin_github_email
+GITHUB_ID=your_github_oauth_client_id
+GITHUB_SECRET=your_github_oauth_client_secret
 ```
 
 ### Database Setup
 
 ```bash
-# Push schema to your Railway database
 npx prisma db push
-
-# Seed with initial posts
-npx ts-node --compiler-options '{"module":"CommonJS"}' prisma/seed.ts
-
-# Open Prisma Studio to verify
+npx npm exec tsx prisma/seed.ts
 npx prisma studio
 ```
 
@@ -107,52 +116,47 @@ npm run dev
 ```
 
 Visit:
-- `localhost:3000` — homepage
-- `localhost:3000/blog` — post listing
-- `localhost:3000/blog/[slug]` — individual post
-- `localhost:3000/api/posts` — posts API
+- `http://localhost:3000`
+- `http://localhost:3000/blog`
+- `http://localhost:3000/blog/[slug]`
+- `http://localhost:3000/login`
+- `http://localhost:3000/admin`
 
 ---
 
-## Build Progress
+## Deployment
 
-| Step | Description | Status |
-|------|-------------|--------|
-| 1 | Next.js + Prisma + Railway setup | ✅ Done |
-| 2 | Posts API + blog pages + Markdown rendering | ✅ Done |
-| 3 | Auth + admin editor | ✅ Done |
-| 4 | Emoji reactions | ⏳ Pending |
-| 5 | Comments + moderation | ⏳ Pending |
-| 6 | Newsletter + double opt-in | ⏳ Pending |
+1. Push your repository to GitHub.
+2. Visit [Vercel](https://vercel.com) and import the repo.
+3. Set the environment variables in Vercel:
+   - `DATABASE_URL`
+   - `ADMIN_EMAIL`
+   - `GITHUB_ID`
+   - `GITHUB_SECRET`
+4. Deploy the app.
 
-Each step is documented as a blog post on the site itself.
-
----
-
-## Known Issues / Errors Encountered
-
-A running log of real errors hit during the build — documented here and in the blog posts.
-
-| Error | Cause | Fix |
-|-------|-------|-----|
-| `MODULE_NOT_FOUND @prisma/client` | `prisma generate` not run after `db push` | `npx prisma generate` — now auto-runs via `postinstall` |
-| `GET /blog` returning 404 | Dev server not restarted after fixing module error | Restart dev server after any module-level fix |
-| Unstyled prose content | `@tailwindcss/typography` not installed | Install plugin + add `@plugin` directive in `globals.css` (Tailwind v4 syntax) |
-
----
-
-## Blog Posts
-
-Posts are written in Markdown and stored in the database. To add a new post, either use the admin editor (Step 3) or add it to `prisma/seed.ts` and re-run the seed script.
+Vercel will build the Next.js app automatically.
 
 ---
 
 ## Notes
 
-- Built with [Claude](https://claude.ai) as a technical advisor and educator
-- Dark editorial design: Instrument Serif + JetBrains Mono, acid green `#c8ff57`
-- All build decisions documented honestly — including the errors
+- Admin access is protected with GitHub OAuth and limited to the configured `ADMIN_EMAIL`.
+- Comments are created as unapproved and must be approved through the admin moderation UI.
+- Reactions use a browser session cookie to prevent duplicate votes.
+- The admin post editor supports draft and publish flows via `app/admin/components/PostEditor.tsx`.
 
 ---
 
-*This README is updated at the end of each build step.*
+## Current Status
+
+The app currently includes:
+
+- Blog pages powered by Prisma
+- Markdown post rendering
+- Search on the blog listing
+- Admin dashboard and post editor
+- Comment submission and moderation
+- Emoji reactions
+- GitHub-based admin authentication
+
