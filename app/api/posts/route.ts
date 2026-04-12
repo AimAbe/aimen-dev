@@ -24,6 +24,7 @@ export async function POST(req: Request) {
   const body = await req.json()
   const post = await prisma.post.create({ data: body })
   
+  revalidatePath('/')
   revalidatePath('/blog')
   
   return Response.json(post)

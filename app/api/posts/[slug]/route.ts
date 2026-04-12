@@ -23,6 +23,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
   const body = await req.json()
   const post = await prisma.post.update({ where: { slug }, data: body })
   
+  revalidatePath('/')
   revalidatePath('/blog')
   revalidatePath(`/blog/${slug}`)
   
@@ -36,6 +37,7 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ slug
   const { slug } = await params
   await prisma.post.delete({ where: { slug } })
   
+  revalidatePath('/')
   revalidatePath('/blog')
   revalidatePath(`/blog/${slug}`)
   

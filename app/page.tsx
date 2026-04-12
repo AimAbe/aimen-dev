@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/db'
 
+export const revalidate = 60 // Revalidate every 60 seconds
+
 export default async function HomePage() {
   const recentPosts = await prisma.post.findMany({
     where: { published: true },
