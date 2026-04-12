@@ -4,6 +4,34 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    /* Dark mode colors */
+    --bg: 256 14% 6%;
+    --bg-card: 268 10% 10%;
+    --bg-hover: 264 12% 14%;
+    --border: 264 10% 16%;
+    --border-hover: 264 8% 22%;
+    --accent: 85 100% 56%;
+    --accent-muted: rgba(200, 255, 87, 0.1);
+    --text: 256 6% 90%;
+    --text-muted: 261 12% 52%;
+    --text-dim: 254 12% 32%;
+  }
+
+  html.light {
+    /* Light mode colors */
+    --bg: 0 0% 100%;
+    --bg-card: 0 0% 96%;
+    --bg-hover: 0 0% 92%;
+    --border: 0 0% 88%;
+    --border-hover: 0 0% 80%;
+    --accent: 85 100% 44%;
+    --accent-muted: rgba(150, 180, 30, 0.1);
+    --text: 0 0% 8%;
+    --text-muted: 0 0% 40%;
+    --text-dim: 0 0% 60%;
+  }
+
   body {
     @apply bg-bg text-text font-sans antialiased;
   }

@@ -1,6 +1,8 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { ThemeProvider } from '@/app/providers/ThemeProvider'
+import { ThemeToggle } from '@/app/components/ThemeToggle'
 
 export const metadata: Metadata = {
   title: 'aimen.dev',
@@ -17,7 +19,7 @@ function Navbar() {
         >
           aimen.dev
         </Link>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <Link
             href="/blog"
             className="text-sm text-text-muted hover:text-text transition-colors"
@@ -32,6 +34,7 @@ function Navbar() {
           >
             github
           </a>
+          <ThemeToggle />
         </div>
       </div>
     </nav>
@@ -72,13 +75,15 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <Navbar />
-        <div className="pt-16 min-h-screen">
-          {children}
-        </div>
-        <Footer />
+        <ThemeProvider>
+          <Navbar />
+          <div className="pt-16 min-h-screen">
+            {children}
+          </div>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   )

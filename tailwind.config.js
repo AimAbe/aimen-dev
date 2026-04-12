@@ -1,4 +1,5 @@
 const config = {
+  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
@@ -8,22 +9,22 @@ const config = {
     extend: {
       colors: {
         bg: {
-          DEFAULT: '#0a0a10',
-          card: '#13131a',
-          hover: '#1a1a24',
+          DEFAULT: 'hsl(var(--bg) / <alpha-value>)',
+          card: 'hsl(var(--bg-card) / <alpha-value>)',
+          hover: 'hsl(var(--bg-hover) / <alpha-value>)',
         },
         border: {
-          DEFAULT: '#1e1e2a',
-          hover: '#2a2a3a',
+          DEFAULT: 'hsl(var(--border) / <alpha-value>)',
+          hover: 'hsl(var(--border-hover) / <alpha-value>)',
         },
         accent: {
-          DEFAULT: '#c8ff57',
-          muted: 'rgba(200,255,87,0.1)',
+          DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
+          muted: 'hsl(var(--accent-muted) / <alpha-value>)',
         },
         text: {
-          DEFAULT: '#e4e2ef',
-          muted: '#6b6880',
-          dim: '#4a4860',
+          DEFAULT: 'hsl(var(--text) / <alpha-value>)',
+          muted: 'hsl(var(--text-muted) / <alpha-value>)',
+          dim: 'hsl(var(--text-dim) / <alpha-value>)',
         },
       },
       fontFamily: {
@@ -47,5 +48,8 @@ const config = {
   },
   plugins: [require('@tailwindcss/typography')],
 }
+
+module.exports = config
+
 
 module.exports = config
