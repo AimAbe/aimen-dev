@@ -39,9 +39,10 @@ export function ThemeToggle() {
       title={isLight ? 'Switch to dark mode' : 'Switch to light mode'}
     >
       {isLight ? (
-        <svg className="w-5 h-5 text-accent" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="5" />
-          <path d="M12 1v6m0 6v6M4.22 4.22l4.24 4.24m3.08 3.08l4.24 4.24M1 12h6m6 0h6m-15.78 7.78l4.24-4.24m3.08-3.08l4.24-4.24" />
+        <svg className="w-5 h-5 text-accent" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M15 14c.2-1 .7-1.7 1-2.5a6 6 0 1 0-11 0c.3.8.8 1.5 1 2.5" />
+          <path d="M9 18h6" />
+          <path d="M10 21h4" />
         </svg>
       ) : (
         <svg className="w-5 h-5 text-accent" fill="currentColor" viewBox="0 0 20 20">
