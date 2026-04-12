@@ -22,6 +22,7 @@ Personal developer blog built with Next.js, Prisma, and GitHub-authenticated adm
 
 - Public blog listing with search
 - Markdown blog posts rendered with `react-markdown`
+- Light/dark mode toggle with theme persistence
 - Emoji reactions persisted per browser session
 - Comments with moderation workflow
 - Admin dashboard for creating, editing, and publishing posts
@@ -60,7 +61,10 @@ aimen-dev/
 │   ├── ModerationClient.tsx
 │   ├── PostNav.tsx
 │   ├── Reactions.tsx
-│   └── Search.tsx
+│   ├── Search.tsx
+│   └── ThemeToggle.tsx
+├── app/providers/
+│   └── ThemeProvider.tsx
 ├── lib/
 │   ├── auth.ts
 │   ├── db.ts
@@ -152,11 +156,12 @@ Vercel will build the Next.js app automatically.
 
 The app currently includes:
 
-- Blog pages powered by Prisma
+- Blog pages powered by Prisma with ISR (Incremental Static Regeneration)
 - Markdown post rendering
 - Search on the blog listing
 - Admin dashboard and post editor
-- Comment submission and moderation
+- Comment submission and moderation (with automatic cache revalidation)
 - Emoji reactions
 - GitHub-based admin authentication
+- Light/dark mode toggle with localStorage persistence
 
