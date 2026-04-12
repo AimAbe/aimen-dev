@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { revalidatePath } from 'next/cache'
 
 export async function GET(
   _req: Request,
@@ -21,6 +22,10 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
   const { slug } = await params
   const body = await req.json()
   const post = await prisma.post.update({ where: { slug }, data: body })
+  
+  revalidatePath('/blog')
+  revalidatePath(`/blog/${slug}`)
+  
   return Response.json(post)
 }
 
@@ -30,5 +35,9 @@ export async function DELETE(_req: Request, { params }: { params: Promise<{ slug
 
   const { slug } = await params
   await prisma.post.delete({ where: { slug } })
+  
+  revalidatePath('/blog')
+  revalidatePath(`/blog/${slug}`)
+  
   return new Response(null, { status: 204 })
 }

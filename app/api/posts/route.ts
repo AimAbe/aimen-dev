@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { revalidatePath } from 'next/cache'
 
 export async function GET() {
   const posts = await prisma.post.findMany({
@@ -22,5 +23,8 @@ export async function POST(req: Request) {
 
   const body = await req.json()
   const post = await prisma.post.create({ data: body })
+  
+  revalidatePath('/blog')
+  
   return Response.json(post)
 }
