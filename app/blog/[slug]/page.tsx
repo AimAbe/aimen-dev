@@ -6,6 +6,8 @@ import CommentsDisplay from '@/app/components/CommentsDisplay'
 import PostNav from '@/app/components/PostNav'
 import Reactions from '@/app/components/Reactions'
 
+export const revalidate = 60 // Revalidate every 60 seconds (ISR)
+
 export async function generateStaticParams() {
   const posts = await prisma.post.findMany({
     where: { published: true },
