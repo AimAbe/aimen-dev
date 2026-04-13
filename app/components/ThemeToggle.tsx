@@ -9,7 +9,7 @@ export function ThemeToggle() {
   useEffect(() => {
     setMounted(true)
     const htmlElement = document.documentElement
-    setIsLight(htmlElement.classList.contains('light'))
+    setIsLight(htmlElement.classList.contains('dark'))
   }, [])
 
   const toggleTheme = () => {
@@ -17,10 +17,10 @@ export function ThemeToggle() {
     const newIsLight = !isLight
 
     if (newIsLight) {
-      htmlElement.classList.add('light')
+      htmlElement.classList.add('dark')
       localStorage.setItem('theme', 'light')
     } else {
-      htmlElement.classList.remove('light')
+      htmlElement.classList.remove('dark')
       localStorage.setItem('theme', 'dark')
     }
 
