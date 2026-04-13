@@ -14,10 +14,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
     const htmlElement = document.documentElement
-    if (!isDark) {
-      htmlElement.classList.add('light')
+    if (isDark) {
+      htmlElement.classList.add('dark')
     } else {
-      htmlElement.classList.remove('light')
+      htmlElement.classList.remove('dark')
     }
   }, [])
 
