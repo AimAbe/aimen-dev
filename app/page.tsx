@@ -73,8 +73,6 @@ export default async function HomePage() {
             <span className="stack-tag">Prisma</span>
             <span className="stack-tag">Tailwind</span>
             <span className="stack-tag">Vercel</span>
-            <span className="stack-tag">Terraform</span>
-            <span className="stack-tag">Kubernetes</span>
           </div>
         </div>
       </div>
@@ -131,8 +129,8 @@ export default async function HomePage() {
             <br />
             <p>{'{'}</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;name&quot;</span>: <span className="t-str">&quot;Aimen&quot;</span>,</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;role&quot;</span>: <span className="t-str">&quot;support engineer → SRE (in progress)&quot;</span>,</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;currently_learning&quot;</span>: [<span className="t-str">&quot;Terraform&quot;</span>, <span className="t-str">&quot;Kubernetes&quot;</span>, <span className="t-str">&quot;CI/CD&quot;</span>],</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;role&quot;</span>: <span className="t-str">&quot;support engineer → enterprise analyst → SRE (in progress)&quot;</span>,</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;currently_learning&quot;</span>: [<span className="t-str">&quot;Go&quot;</span>, <span className="t-str">&quot;Docker&quot;</span>, <span className="t-str">&quot;AWS&quot;</span>, <span className="t-str">&quot;CI/CD&quot;</span>],</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;blog_purpose&quot;</span>: <span className="t-str">&quot;document the journey, not just the destination&quot;</span>,</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;uses_ai&quot;</span>: <span className="t-val">true</span>, <span className="t-comment">{'// openly and honestly'}</span></p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;posts_published&quot;</span>: <span className="t-val">{totalPosts}</span></p>
