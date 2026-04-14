@@ -1,5 +1,4 @@
 const config = {
-  darkMode: 'class',
   content: [
     './app/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
@@ -9,27 +8,28 @@ const config = {
     extend: {
       colors: {
         bg: {
-          DEFAULT: 'hsl(var(--bg) / <alpha-value>)',
-          card: 'hsl(var(--bg-card) / <alpha-value>)',
-          hover: 'hsl(var(--bg-hover) / <alpha-value>)',
+          DEFAULT: 'var(--bg)',
+          card: 'var(--surface)',
+          hover: 'var(--surface2)',
         },
         border: {
-          DEFAULT: 'hsl(var(--border) / <alpha-value>)',
-          hover: 'hsl(var(--border-hover) / <alpha-value>)',
+          DEFAULT: 'var(--border)',
+          hover: 'var(--border)',
         },
         accent: {
-          DEFAULT: 'hsl(var(--accent) / <alpha-value>)',
-          muted: 'hsl(var(--accent-muted) / <alpha-value>)',
+          DEFAULT: 'var(--accent)',
+          muted: 'rgba(137,180,250,0.12)',
         },
         text: {
-          DEFAULT: 'hsl(var(--text) / <alpha-value>)',
-          muted: 'hsl(var(--text-muted) / <alpha-value>)',
-          dim: 'hsl(var(--text-dim) / <alpha-value>)',
+          DEFAULT: 'var(--text)',
+          muted: 'var(--muted)',
+          dim: 'var(--muted)',
         },
       },
       fontFamily: {
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Sora', 'system-ui', 'sans-serif'],
+        serif: ['Lora', 'Georgia', 'serif'],
       },
       keyframes: {
         'fade-in': {
@@ -48,8 +48,5 @@ const config = {
   },
   plugins: [require('@tailwindcss/typography')],
 }
-
-module.exports = config
-
 
 module.exports = config

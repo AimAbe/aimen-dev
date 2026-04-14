@@ -3,11 +3,21 @@ import { prisma } from '@/lib/db'
 
 export const revalidate = 60 // Revalidate every 60 seconds
 
+function getTagClass(tag: string | null): string {
+  if (!tag) return 'tag-build'
+  const t = tag.toLowerCase()
+  if (t.includes('build')) return 'tag-build'
+  if (t.includes('deep')) return 'tag-deep'
+  if (t.includes('career')) return 'tag-career'
+  if (t.includes('full')) return 'tag-full'
+  return 'tag-build'
+}
+
 export default async function HomePage() {
   const recentPosts = await prisma.post.findMany({
     where: { published: true },
     orderBy: { createdAt: 'desc' },
-    take: 3,
+    take: 5,
     select: {
       slug: true,
       title: true,
@@ -17,86 +27,121 @@ export default async function HomePage() {
     },
   })
 
+  const totalPosts = await prisma.post.count({ where: { published: true } })
+
   return (
-    <main className="max-w-3xl mx-auto px-6 pt-24 pb-16">
-      <section className="pt-24 pb-16">
-        <p className="text-sm font-mono text-accent mb-4">Hi, I&apos;m Aimen</p>
-        <h1 className="text-4xl sm:text-5xl font-bold leading-tight mb-6">
-          I build things for the web<span className="text-accent">.</span>
-        </h1>
-        <p className="text-lg text-text-muted leading-relaxed max-w-xl">
-          Developer, tinkerer, and occasional writer. I document what I learn
-          and build in public. This site is one of those projects.
-        </p>
-        <div className="flex items-center gap-4 mt-8">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 bg-accent text-bg font-mono text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity"
-          >
-            Read the blog →
-          </Link>
-          <a
-            href="https://github.com/AimAbe"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 border border-border text-text-muted font-mono text-sm font-medium px-5 py-2.5 rounded-lg hover:border-border-hover hover:text-text transition-all"
-          >
-            GitHub
-          </a>
+    <>
+      {/* HERO */}
+      <section className="hero">
+        <div className="hero-glow" />
+        <div className="hero-inner">
+          <div className="hero-eyebrow">
+            <div className="eyebrow-dot" />
+            Hi, I&apos;m Aimen
+          </div>
+          <h1 className="hero-title">
+            I build things<br />
+            <span className="line2">for the <span className="accent-word">web.</span></span>
+          </h1>
+          <p className="hero-sub">
+            Developer, tinkerer, and occasional writer. I document what I learn
+            and build in public. This site is one of those projects.
+          </p>
+          <div className="hero-cta">
+            <Link href="/blog" className="btn btn-primary">Read the blog →</Link>
+            <a href="https://github.com/AimAbe" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">GitHub</a>
+          </div>
         </div>
       </section>
 
-      <hr className="border-border" />
+      {/* ABOUT */}
+      <div className="about-strip">
+        <div className="about-cell">
+          <p className="cell-label">who</p>
+          <p className="cell-text">
+            Developer, builder, perpetual learner. I write about things I&apos;m actively working through —
+            <em> not the things I&apos;ve already mastered.</em>
+          </p>
+        </div>
+        <div className="about-cell">
+          <p className="cell-label">stack</p>
+          <p className="cell-text" style={{ fontSize: '15px', fontFamily: 'var(--sans)', fontWeight: 300 }}>Currently building with:</p>
+          <div className="stack-tags">
+            <span className="stack-tag">Next.js</span>
+            <span className="stack-tag">TypeScript</span>
+            <span className="stack-tag">PostgreSQL</span>
+            <span className="stack-tag">Prisma</span>
+            <span className="stack-tag">Tailwind</span>
+            <span className="stack-tag">Vercel</span>
+            <span className="stack-tag">Terraform</span>
+            <span className="stack-tag">Kubernetes</span>
+          </div>
+        </div>
+      </div>
 
-      <section className="py-16">
-        <h2 className="text-sm font-mono text-text-dim uppercase tracking-widest mb-8">
-          Recent Writing
-        </h2>
+      {/* POSTS */}
+      <section className="posts-section">
+        <div className="section-header">
+          <span className="section-title">Recent Writing</span>
+          <Link href="/blog" className="section-link">All posts →</Link>
+        </div>
 
-        {recentPosts.length === 0 ? (
-          <p className="text-text-muted">No posts yet.</p>
-        ) : (
-          <ul className="space-y-2">
-            {recentPosts.map((post) => (
-              <li key={post.slug}>
-                <Link
-                  href={`/blog/${post.slug}`}
-                  className="group flex items-center justify-between gap-4 py-4 px-4 -mx-4 rounded-lg hover:bg-bg-card transition-colors"
-                >
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-3 mb-1">
-                      {post.tag && <span className="tag">{post.tag}</span>}
-                      <h3 className="font-semibold truncate group-hover:text-accent transition-colors">
-                        {post.title}
-                      </h3>
-                    </div>
-                    {post.excerpt && (
-                      <p className="text-sm text-text-muted truncate">
-                        {post.excerpt}
-                      </p>
-                    )}
+        <div className="post-list">
+          {recentPosts.length === 0 ? (
+            <div className="post-card" style={{ justifyContent: 'center' }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--muted)' }}>No posts yet. Check back soon.</span>
+            </div>
+          ) : (
+            recentPosts.map((post) => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="post-card">
+                <div className="post-card-left">
+                  <div className="post-meta">
+                    {post.tag && <span className={`post-tag ${getTagClass(post.tag)}`}>{post.tag}</span>}
+                    <span className="post-date">
+                      {new Date(post.createdAt).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}
+                    </span>
                   </div>
-                  <time className="text-xs font-mono text-text-dim whitespace-nowrap">
-                    {new Date(post.createdAt).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })}
-                  </time>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {recentPosts.length > 0 && (
-          <Link
-            href="/blog"
-            className="inline-block mt-8 text-sm font-mono text-accent hover:underline underline-offset-4"
-          >
-            All posts →
-          </Link>
-        )}
+                  <div className="post-title-text">{post.title}</div>
+                  {post.excerpt && <div className="post-excerpt">{post.excerpt}</div>}
+                </div>
+                <span className="post-arrow">→</span>
+              </Link>
+            ))
+          )}
+        </div>
       </section>
-    </main>
+
+      {/* TERMINAL */}
+      <section className="terminal-section">
+        <div className="terminal">
+          <div className="terminal-bar">
+            <div className="t-dot t-red" />
+            <div className="t-dot t-yellow" />
+            <div className="t-dot t-green" />
+            <span className="t-title">~ aimen.dev/whoami</span>
+          </div>
+          <div className="terminal-body">
+            <p className="t-comment">{'// quick summary'}</p>
+            <br />
+            <p className="t-prompt">cat whoami.json</p>
+            <br />
+            <p>{'{'}</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;name&quot;</span>: <span className="t-str">&quot;Aimen&quot;</span>,</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;role&quot;</span>: <span className="t-str">&quot;support engineer → SRE (in progress)&quot;</span>,</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;currently_learning&quot;</span>: [<span className="t-str">&quot;Terraform&quot;</span>, <span className="t-str">&quot;Kubernetes&quot;</span>, <span className="t-str">&quot;CI/CD&quot;</span>],</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;blog_purpose&quot;</span>: <span className="t-str">&quot;document the journey, not just the destination&quot;</span>,</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;uses_ai&quot;</span>: <span className="t-val">true</span>, <span className="t-comment">{'// openly and honestly'}</span></p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;posts_published&quot;</span>: <span className="t-val">{totalPosts}</span></p>
+            <p>{'}'}</p>
+            <br />
+            <p className="t-prompt"><span className="t-cursor" /></p>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }

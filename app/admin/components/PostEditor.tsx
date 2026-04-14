@@ -4,12 +4,12 @@ import { useRouter } from 'next/navigation'
 
 const inputStyle = {
   width: '100%',
-  background: '#13131a',
-  border: '1px solid #1e1e2a',
+  background: '#252D3D',
+  border: '1px solid #313244',
   borderRadius: '3px',
   padding: '12px 16px',
-  color: '#e8e6f0',
-  fontFamily: 'DM Sans, sans-serif',
+  color: '#CDD6F4',
+  fontFamily: 'Sora, sans-serif',
   fontSize: '14px',
   outline: 'none',
 }
@@ -17,7 +17,7 @@ const inputStyle = {
 const labelStyle = {
   fontFamily: 'JetBrains Mono, monospace',
   fontSize: '10px',
-  color: '#6b6880',
+  color: '#6C7393',
   letterSpacing: '0.12em',
   textTransform: 'uppercase' as const,
   marginBottom: '8px',
@@ -84,20 +84,20 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
   }
 
   return (
-    <main style={{ minHeight: '100vh', background: '#0c0c0f', color: '#e8e6f0', fontFamily: 'DM Sans, sans-serif', padding: '48px' }}>
+    <main style={{ minHeight: '100vh', background: '#1E2430', color: '#CDD6F4', fontFamily: 'Sora, sans-serif', padding: '48px' }}>
       <div style={{ maxWidth: '860px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid #1e1e2a', paddingBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid #313244', paddingBottom: '24px' }}>
           <div>
-            <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#c8ff57', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
+            <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#89B4FA', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
               // {mode === 'new' ? 'new post' : 'edit post'}
             </p>
-            <h1 style={{ fontFamily: 'Instrument Serif, serif', fontSize: '32px', fontWeight: 400 }}>
+            <h1 style={{ fontFamily: 'Lora, serif', fontSize: '32px', fontWeight: 400 }}>
               {mode === 'new' ? 'Create Post' : (form.title || 'Edit Post')}
             </h1>
           </div>
-          <a href="/admin" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6b6880', textDecoration: 'none' }}>← Back</a>
+          <a href="/admin" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6C7393', textDecoration: 'none' }}>← Back</a>
         </div>
 
         {/* Form */}
@@ -141,14 +141,14 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={saving}
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: 'transparent', color: '#6b6880', border: '1px solid #1e1e2a', borderRadius: '3px', cursor: 'pointer' }}
+                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: 'transparent', color: '#6C7393', border: '1px solid #313244', borderRadius: '3px', cursor: 'pointer' }}
               >
                 {saving ? 'Saving...' : 'Save Draft'}
               </button>
               <button
                 onClick={() => handleSubmit(true)}
                 disabled={saving}
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: '#c8ff57', color: '#0c0c0f', border: 'none', borderRadius: '3px', cursor: 'pointer', fontWeight: 500 }}
+                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: '#89B4FA', color: '#1E2430', border: 'none', borderRadius: '3px', cursor: 'pointer', fontWeight: 500 }}
               >
                 {saving ? 'Publishing...' : 'Publish'}
               </button>

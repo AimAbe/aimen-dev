@@ -18,7 +18,7 @@ export default function EditPostPage({ params }: { params: Promise<{ slug: strin
   }, [params])
 
   if (!post) return (
-    <div style={{ minHeight: '100vh', background: '#0c0c0f', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#6b6880' }}>
+    <div style={{ minHeight: '100vh', background: '#1E2430', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#6C7393' }}>
       Loading...
     </div>
   )

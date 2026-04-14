@@ -50,13 +50,13 @@ export default function Reactions({ postId }: { postId: number }) {
             alignItems: 'center',
             gap: '6px',
             padding: '8px 14px',
-            background: reacted.includes(emoji) ? 'rgba(200,255,87,0.1)' : '#13131a',
-            border: `1px solid ${reacted.includes(emoji) ? '#c8ff57' : '#1e1e2a'}`,
+            background: reacted.includes(emoji) ? 'rgba(137,180,250,0.1)' : '#252D3D',
+            border: `1px solid ${reacted.includes(emoji) ? '#89B4FA' : '#313244'}`,
             borderRadius: '999px',
             cursor: reacted.includes(emoji) ? 'default' : 'pointer',
             fontFamily: 'JetBrains Mono, monospace',
             fontSize: '13px',
-            color: reacted.includes(emoji) ? '#c8ff57' : '#6b6880',
+            color: reacted.includes(emoji) ? '#89B4FA' : '#6C7393',
             transition: 'all 0.15s ease'
           }}
         >
