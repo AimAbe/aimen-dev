@@ -128,7 +128,7 @@ export default async function HomePage() {
             <p className="t-prompt">cat whoami.json</p>
             <br />
             <p>{'{'}</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;name&quot;</span>: <span className="t-str">&quot;Aimen&quot;</span>,</p>
+            <p>&nbsp;&nbsp;<span className="t-key">&quot;name&quot;</span>: <span className="t-str">&quot;Aimen Aberra&quot;</span>,</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;role&quot;</span>: <span className="t-str">&quot;support engineer → enterprise analyst → SRE (in progress)&quot;</span>,</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;currently_learning&quot;</span>: [<span className="t-str">&quot;Go&quot;</span>, <span className="t-str">&quot;Docker&quot;</span>, <span className="t-str">&quot;AWS&quot;</span>, <span className="t-str">&quot;CI/CD&quot;</span>],</p>
             <p>&nbsp;&nbsp;<span className="t-key">&quot;blog_purpose&quot;</span>: <span className="t-str">&quot;document the journey, not just the destination&quot;</span>,</p>
