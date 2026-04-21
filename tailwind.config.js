@@ -18,7 +18,7 @@ const config = {
         },
         accent: {
           DEFAULT: 'var(--accent)',
-          muted: 'rgba(137,180,250,0.12)',
+          muted: 'rgba(232,184,75,0.12)',
         },
         text: {
           DEFAULT: 'var(--text)',
@@ -27,9 +27,9 @@ const config = {
         },
       },
       fontFamily: {
-        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        sans: ['Sora', 'system-ui', 'sans-serif'],
-        serif: ['Lora', 'Georgia', 'serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
       },
       keyframes: {
         'fade-in': {
