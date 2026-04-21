@@ -27,6 +27,7 @@ describe('Reactions', () => {
 
   it('displays reaction counts', async () => {
     vi.mocked(global.fetch).mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve([
         { emoji: '❤️', _count: 3 },
         { emoji: '🔥', _count: 1 },
@@ -46,11 +47,13 @@ describe('Reactions', () => {
 
     // Initial load
     vi.mocked(global.fetch).mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve([]),
     } as any)
 
     // POST reaction response
     vi.mocked(global.fetch).mockResolvedValueOnce({
+      ok: true,
       json: () => Promise.resolve([{ emoji: '❤️', _count: 1 }]),
     } as any)
 

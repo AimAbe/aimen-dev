@@ -3,7 +3,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 vi.mock('@/lib/db', () => ({
   prisma: {
     post: {
-      findMany: vi.fn(),
+      findUnique: vi.fn(),
+      findFirst: vi.fn(),
     },
   },
 }))
@@ -11,16 +12,16 @@ vi.mock('@/lib/db', () => ({
 import { getAdjacentPosts } from '@/lib/getAdjacentPosts'
 import { prisma } from '@/lib/db'
 
+const t = (offset = 0) => new Date(1_000_000 + offset)
+
 describe('getAdjacentPosts', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns prev and next posts for a middle post', async () => {
-    const posts = [
-      { slug: 'first', title: 'First' },
-      { slug: 'second', title: 'Second' },
-      { slug: 'third', title: 'Third' },
-    ]
-    vi.mocked(prisma.post.findMany).mockResolvedValue(posts as any)
+    vi.mocked(prisma.post.findUnique).mockResolvedValue({ createdAt: t(1) } as any)
+    vi.mocked(prisma.post.findFirst)
+      .mockResolvedValueOnce({ slug: 'first', title: 'First' } as any)
+      .mockResolvedValueOnce({ slug: 'third', title: 'Third' } as any)
 
     const result = await getAdjacentPosts('second')
 
@@ -29,11 +30,10 @@ describe('getAdjacentPosts', () => {
   })
 
   it('returns null prev for the first post', async () => {
-    const posts = [
-      { slug: 'first', title: 'First' },
-      { slug: 'second', title: 'Second' },
-    ]
-    vi.mocked(prisma.post.findMany).mockResolvedValue(posts as any)
+    vi.mocked(prisma.post.findUnique).mockResolvedValue({ createdAt: t(0) } as any)
+    vi.mocked(prisma.post.findFirst)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce({ slug: 'second', title: 'Second' } as any)
 
     const result = await getAdjacentPosts('first')
 
@@ -42,11 +42,10 @@ describe('getAdjacentPosts', () => {
   })
 
   it('returns null next for the last post', async () => {
-    const posts = [
-      { slug: 'first', title: 'First' },
-      { slug: 'second', title: 'Second' },
-    ]
-    vi.mocked(prisma.post.findMany).mockResolvedValue(posts as any)
+    vi.mocked(prisma.post.findUnique).mockResolvedValue({ createdAt: t(2) } as any)
+    vi.mocked(prisma.post.findFirst)
+      .mockResolvedValueOnce({ slug: 'first', title: 'First' } as any)
+      .mockResolvedValueOnce(null)
 
     const result = await getAdjacentPosts('second')
 
@@ -55,8 +54,10 @@ describe('getAdjacentPosts', () => {
   })
 
   it('returns both null for a single post', async () => {
-    const posts = [{ slug: 'only', title: 'Only Post' }]
-    vi.mocked(prisma.post.findMany).mockResolvedValue(posts as any)
+    vi.mocked(prisma.post.findUnique).mockResolvedValue({ createdAt: t(0) } as any)
+    vi.mocked(prisma.post.findFirst)
+      .mockResolvedValueOnce(null)
+      .mockResolvedValueOnce(null)
 
     const result = await getAdjacentPosts('only')
 
@@ -65,11 +66,12 @@ describe('getAdjacentPosts', () => {
   })
 
   it('returns both null when slug not found', async () => {
-    vi.mocked(prisma.post.findMany).mockResolvedValue([])
+    vi.mocked(prisma.post.findUnique).mockResolvedValue(null)
 
     const result = await getAdjacentPosts('nonexistent')
 
     expect(result.prev).toBeNull()
     expect(result.next).toBeNull()
+    expect(prisma.post.findFirst).not.toHaveBeenCalled()
   })
 })

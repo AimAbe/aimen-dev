@@ -13,91 +13,65 @@ export default async function AdminPage() {
   })
 
   return (
-    <main style={{
-      minHeight: '100vh',
-      background: '#1E2430',
-      color: '#CDD6F4',
-      fontFamily: 'Sora, sans-serif',
-      padding: '48px'
-    }}>
-      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+    <main className="min-h-screen bg-bg text-text font-sans p-12">
+      <div className="max-w-[860px] mx-auto">
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '48px', borderBottom: '1px solid #313244', paddingBottom: '24px' }}>
+        <div className="flex justify-between items-center mb-12 border-b border-border pb-6">
           <div>
-            <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#89B4FA', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>// admin</p>
-            <h1 style={{ fontFamily: 'Lora, serif', fontSize: '36px', fontWeight: 400 }}>aimen.dev</h1>
+            <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-2">// admin</p>
+            <h1 className="font-serif text-[36px] font-normal">aimen.dev</h1>
           </div>
-          <Link href="/admin/new" style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '12px',
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            padding: '12px 24px',
-            background: '#89B4FA',
-            color: '#1E2430',
-            textDecoration: 'none',
-            borderRadius: '3px',
-            fontWeight: 500
-          }}>
+          <Link
+            href="/admin/new"
+            className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-accent text-bg no-underline rounded font-medium hover:opacity-90 transition-opacity"
+          >
             + New Post
           </Link>
         </div>
 
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1px', background: '#313244', border: '1px solid #313244', marginBottom: '32px' }}>
+        <div className="grid grid-cols-3 gap-px bg-border border border-border mb-8">
           {[
             { label: 'Total Posts', value: posts.length },
             { label: 'Published', value: posts.filter(p => p.published).length },
             { label: 'Drafts', value: posts.filter(p => !p.published).length },
           ].map(stat => (
-            <div key={stat.label} style={{ background: '#252D3D', padding: '24px 28px' }}>
-              <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: '#6C7393', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>{stat.label}</p>
-              <p style={{ fontFamily: 'Lora, serif', fontSize: '32px', color: '#89B4FA' }}>{stat.value}</p>
+            <div key={stat.label} className="bg-bg-card px-7 py-6">
+              <p className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2">{stat.label}</p>
+              <p className="font-serif text-[32px] text-accent">{stat.value}</p>
             </div>
           ))}
         </div>
 
         {/* Post list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', background: '#313244', border: '1px solid #313244' }}>
+        <div className="flex flex-col gap-px bg-border border border-border">
           {posts.length === 0 && (
-            <div style={{ background: '#252D3D', padding: '40px', textAlign: 'center', color: '#6C7393', fontFamily: 'JetBrains Mono, monospace', fontSize: '13px' }}>
+            <div className="bg-bg-card p-10 text-center text-text-muted font-mono text-[13px]">
               No posts yet. Create your first one.
             </div>
           )}
           {posts.map(post => (
-            <div key={post.id} style={{ background: '#1E2430', padding: '20px 28px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div key={post.id} className="bg-bg px-7 py-5 flex items-center justify-between">
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '6px' }}>
-                  <span style={{
-                    fontFamily: 'JetBrains Mono, monospace',
-                    fontSize: '10px',
-                    padding: '2px 8px',
-                    borderRadius: '2px',
-                    background: post.published ? 'rgba(137,180,250,0.1)' : 'rgba(108,115,147,0.15)',
-                    color: post.published ? '#89B4FA' : '#6C7393',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase'
-                  }}>
+                <div className="flex items-center gap-3 mb-1.5">
+                  <span className={`font-mono text-[10px] px-2 py-0.5 rounded-sm tracking-[0.08em] uppercase ${
+                    post.published
+                      ? 'bg-accent-muted text-accent'
+                      : 'bg-text-muted/15 text-text-muted'
+                  }`}>
                     {post.published ? 'Published' : 'Draft'}
                   </span>
-                  <span style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: '#6C7393' }}>
+                  <span className="font-mono text-[10px] text-text-muted">
                     {new Date(post.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </span>
                 </div>
-                <p style={{ fontSize: '16px', color: '#CDD6F4' }}>{post.title}</p>
+                <p className="text-base text-text">{post.title}</p>
               </div>
-              <Link href={`/admin/edit/${post.slug}`} style={{
-                fontFamily: 'JetBrains Mono, monospace',
-                fontSize: '11px',
-                color: '#6C7393',
-                textDecoration: 'none',
-                border: '1px solid #313244',
-                padding: '8px 16px',
-                borderRadius: '3px',
-                letterSpacing: '0.06em',
-                whiteSpace: 'nowrap'
-              }}>
+              <Link
+                href={`/admin/edit/${post.slug}`}
+                className="font-mono text-[11px] text-text-muted no-underline border border-border px-4 py-2 rounded tracking-[0.06em] whitespace-nowrap hover:text-text hover:border-border-hover transition-colors"
+              >
                 Edit →
               </Link>
             </div>
@@ -105,9 +79,9 @@ export default async function AdminPage() {
         </div>
 
         {/* Footer */}
-        <div style={{ marginTop: '32px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Link href="/" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6C7393', textDecoration: 'none' }}>← View site</Link>
-          <Link href="/api/auth/signout" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6C7393', textDecoration: 'none' }}>Sign out</Link>
+        <div className="mt-8 flex justify-between items-center">
+          <Link href="/" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← View site</Link>
+          <Link href="/api/auth/signout" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">Sign out</Link>
         </div>
 
       </div>

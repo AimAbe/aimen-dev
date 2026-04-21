@@ -18,7 +18,7 @@ export default function EditPostPage({ params }: { params: Promise<{ slug: strin
   }, [params])
 
   if (!post) return (
-    <div style={{ minHeight: '100vh', background: '#1E2430', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', color: '#6C7393' }}>
+    <div className="min-h-screen bg-bg flex items-center justify-center font-mono text-xs text-text-muted">
       Loading...
     </div>
   )

@@ -2,44 +2,29 @@ import { signIn } from '@/lib/auth'
 
 export default function LoginPage() {
   return (
-    <div style={{
-      minHeight: '100vh', background: '#1E2430',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontFamily: 'Sora, sans-serif'
-    }}>
-      <div style={{ textAlign: 'center' }}>
-        <p style={{
-          fontFamily: 'JetBrains Mono, monospace', fontSize: '11px',
-          color: '#89B4FA', letterSpacing: '0.15em', textTransform: 'uppercase',
-          marginBottom: '16px'
-        }}>
+    <div className="min-h-screen bg-bg flex items-center justify-center font-sans">
+      <div className="text-center">
+        <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-4">
           // admin access
         </p>
-        <h1 style={{
-          fontFamily: 'Lora, serif', fontSize: '40px',
-          fontWeight: 400, color: '#CDD6F4', marginBottom: '8px'
-        }}>
+        <h1 className="font-serif text-[40px] font-normal text-text mb-2">
           aimen.dev
         </h1>
-        <p style={{ color: '#6C7393', fontSize: '14px', marginBottom: '40px' }}>
+        <p className="text-text-muted text-sm mb-10">
           Sign in to access the admin area
         </p>
         <form action={async () => {
           'use server'
           await signIn('github', { redirectTo: '/admin' })
         }}>
-          <button type="submit" style={{
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase',
-            padding: '14px 32px',
-            background: '#89B4FA', color: '#1E2430',
-            border: 'none', borderRadius: '3px',
-            cursor: 'pointer', fontWeight: 500
-          }}>
+          <button
+            type="submit"
+            className="font-mono text-xs tracking-[0.08em] uppercase px-8 py-3.5 bg-accent text-bg border-none rounded cursor-pointer font-medium hover:opacity-90 transition-opacity"
+          >
             Sign in with GitHub
           </button>
         </form>
-        <p style={{ marginTop: '24px', fontFamily: 'JetBrains Mono, monospace', fontSize: '10px', color: '#6C7393' }}>
+        <p className="mt-6 font-mono text-[10px] text-text-muted">
           restricted access · admin only
         </p>
       </div>

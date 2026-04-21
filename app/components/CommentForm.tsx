@@ -7,19 +7,26 @@ export default function CommentForm({ slug }: { slug: string }) {
   const [content, setContent] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true)
+    setError(null)
 
-    await fetch('/api/comments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ slug, author, content }),
-    })
-
-    setSubmitted(true)
-    setLoading(false)
+    try {
+      const res = await fetch('/api/comments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ slug, author, content }),
+      })
+      if (!res.ok) throw new Error()
+      setSubmitted(true)
+    } catch {
+      setError('Failed to submit comment. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   if (submitted) {
@@ -49,6 +56,9 @@ export default function CommentForm({ slug }: { slug: string }) {
         rows={4}
         className="w-full bg-bg-card border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors resize-none"
       />
+      {error && (
+        <p className="text-sm text-red-400">{error}</p>
+      )}
       <button
         type="submit"
         disabled={loading}

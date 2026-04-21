@@ -15,57 +15,57 @@ export default function Reactions({ postId }: { postId: number }) {
 
   useEffect(() => {
     fetch(`/api/reactions?postId=${postId}`)
-      .then(r => r.json())
+      .then(r => r.ok ? r.json() : Promise.reject())
       .then(setReactions)
+      .catch(() => {})
   }, [postId])
 
   const handleReact = async (emoji: string) => {
     if (loading) return
     setLoading(true)
 
-    const res = await fetch('/api/reactions', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ postId, emoji })
-    })
-
-    const updated = await res.json()
-    setReactions(updated)
-    setReacted(prev => [...prev, emoji])
-    setLoading(false)
+    try {
+      const res = await fetch('/api/reactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ postId, emoji })
+      })
+      if (!res.ok) throw new Error()
+      const updated = await res.json()
+      setReactions(updated)
+      setReacted(prev => [...prev, emoji])
+    } catch {
+      // reaction failed silently — counts stay unchanged
+    } finally {
+      setLoading(false)
+    }
   }
 
   const getCount = (emoji: string) =>
     reactions.find(r => r.emoji === emoji)?._count ?? 0
 
   return (
-    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', margin: '40px 0' }}>
-      {EMOJIS.map(emoji => (
-        <button
-          key={emoji}
-          onClick={() => handleReact(emoji)}
-          disabled={reacted.includes(emoji)}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            padding: '8px 14px',
-            background: reacted.includes(emoji) ? 'rgba(137,180,250,0.1)' : '#252D3D',
-            border: `1px solid ${reacted.includes(emoji) ? '#89B4FA' : '#313244'}`,
-            borderRadius: '999px',
-            cursor: reacted.includes(emoji) ? 'default' : 'pointer',
-            fontFamily: 'JetBrains Mono, monospace',
-            fontSize: '13px',
-            color: reacted.includes(emoji) ? '#89B4FA' : '#6C7393',
-            transition: 'all 0.15s ease'
-          }}
-        >
-          <span>{emoji}</span>
-          {getCount(emoji) > 0 && (
-            <span style={{ fontSize: '11px' }}>{getCount(emoji)}</span>
-          )}
-        </button>
-      ))}
+    <div className="flex gap-2 flex-wrap my-10">
+      {EMOJIS.map(emoji => {
+        const active = reacted.includes(emoji)
+        return (
+          <button
+            key={emoji}
+            onClick={() => handleReact(emoji)}
+            disabled={active}
+            className={`flex items-center gap-1.5 px-3.5 py-2 border rounded-full font-mono text-[13px] transition-all duration-150 ${
+              active
+                ? 'bg-accent-muted border-accent text-accent cursor-default'
+                : 'bg-bg-card border-border text-text-muted cursor-pointer hover:border-accent hover:text-accent'
+            }`}
+          >
+            <span>{emoji}</span>
+            {getCount(emoji) > 0 && (
+              <span className="text-[11px]">{getCount(emoji)}</span>
+            )}
+          </button>
+        )
+      })}
     </div>
   )
 }

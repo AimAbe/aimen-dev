@@ -2,28 +2,6 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 
-const inputStyle = {
-  width: '100%',
-  background: '#252D3D',
-  border: '1px solid #313244',
-  borderRadius: '3px',
-  padding: '12px 16px',
-  color: '#CDD6F4',
-  fontFamily: 'Sora, sans-serif',
-  fontSize: '14px',
-  outline: 'none',
-}
-
-const labelStyle = {
-  fontFamily: 'JetBrains Mono, monospace',
-  fontSize: '10px',
-  color: '#6C7393',
-  letterSpacing: '0.12em',
-  textTransform: 'uppercase' as const,
-  marginBottom: '8px',
-  display: 'block',
-}
-
 type PostForm = {
   title: string
   slug: string
@@ -43,10 +21,14 @@ const defaultForm: PostForm = {
   title: '', slug: '', excerpt: '', tag: '', content: '', published: false
 }
 
+const inputClass = 'w-full bg-bg-card border border-border rounded px-4 py-3 text-text font-sans text-sm outline-none focus:border-accent transition-colors'
+const labelClass = 'font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2 block'
+
 export default function PostEditor({ initialForm = defaultForm, originalSlug = '', mode }: Props) {
   const router = useRouter()
   const [form, setForm] = useState<PostForm>(initialForm)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value
@@ -60,95 +42,109 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
 
   const handleSubmit = async (published: boolean) => {
     setSaving(true)
-    if (mode === 'new') {
-      await fetch('/api/posts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, published })
-      })
-    } else {
-      await fetch(`/api/posts/${originalSlug}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, published })
-      })
+    setError(null)
+    try {
+      const res = mode === 'new'
+        ? await fetch('/api/posts', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...form, published })
+          })
+        : await fetch(`/api/posts/${originalSlug}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...form, published })
+          })
+      if (!res.ok) throw new Error(await res.text())
+      router.push('/admin')
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Failed to save post. Please try again.')
+    } finally {
+      setSaving(false)
     }
-    setSaving(false)
-    router.push('/admin')
   }
 
   const handleDelete = async () => {
     if (!confirm('Delete this post? This cannot be undone.')) return
-    await fetch(`/api/posts/${originalSlug}`, { method: 'DELETE' })
-    router.push('/admin')
+    try {
+      const res = await fetch(`/api/posts/${originalSlug}`, { method: 'DELETE' })
+      if (!res.ok) throw new Error()
+      router.push('/admin')
+    } catch {
+      setError('Failed to delete post. Please try again.')
+    }
   }
 
   return (
-    <main style={{ minHeight: '100vh', background: '#1E2430', color: '#CDD6F4', fontFamily: 'Sora, sans-serif', padding: '48px' }}>
-      <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+    <main className="min-h-screen bg-bg text-text font-sans p-12">
+      <div className="max-w-[860px] mx-auto">
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px', borderBottom: '1px solid #313244', paddingBottom: '24px' }}>
+        <div className="flex justify-between items-center mb-10 border-b border-border pb-6">
           <div>
-            <p style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#89B4FA', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: '8px' }}>
+            <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-2">
               // {mode === 'new' ? 'new post' : 'edit post'}
             </p>
-            <h1 style={{ fontFamily: 'Lora, serif', fontSize: '32px', fontWeight: 400 }}>
+            <h1 className="font-serif text-[32px] font-normal">
               {mode === 'new' ? 'Create Post' : (form.title || 'Edit Post')}
             </h1>
           </div>
-          <a href="/admin" style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '11px', color: '#6C7393', textDecoration: 'none' }}>← Back</a>
+          <a href="/admin" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← Back</a>
         </div>
 
         {/* Form */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div className="flex flex-col gap-6">
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label style={labelStyle}>Title</label>
-              <input style={inputStyle} placeholder="Post title" value={form.title} onChange={handleTitleChange} />
+              <label className={labelClass}>Title</label>
+              <input className={inputClass} placeholder="Post title" value={form.title} onChange={handleTitleChange} />
             </div>
             <div>
-              <label style={labelStyle}>Slug</label>
-              <input style={inputStyle} placeholder="post-slug" value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} />
+              <label className={labelClass}>Slug</label>
+              <input className={inputClass} placeholder="post-slug" value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} />
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr', gap: '16px' }}>
+          <div className="grid grid-cols-[3fr_1fr] gap-4">
             <div>
-              <label style={labelStyle}>Excerpt</label>
-              <input style={inputStyle} placeholder="Short description shown on listing page" value={form.excerpt ?? ''} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))} />
+              <label className={labelClass}>Excerpt</label>
+              <input className={inputClass} placeholder="Short description shown on listing page" value={form.excerpt ?? ''} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))} />
             </div>
             <div>
-              <label style={labelStyle}>Tag</label>
-              <input style={inputStyle} placeholder="build log" value={form.tag ?? ''} onChange={e => setForm(f => ({ ...f, tag: e.target.value }))} />
+              <label className={labelClass}>Tag</label>
+              <input className={inputClass} placeholder="build log" value={form.tag ?? ''} onChange={e => setForm(f => ({ ...f, tag: e.target.value }))} />
             </div>
           </div>
 
           <div>
-            <label style={labelStyle}>Content (Markdown)</label>
+            <label className={labelClass}>Content (Markdown)</label>
             <textarea
-              style={{ ...inputStyle, fontFamily: 'JetBrains Mono, monospace', fontSize: '13px', lineHeight: '1.7', resize: 'vertical', minHeight: '480px' }}
+              className={`${inputClass} font-mono text-[13px] leading-[1.7] resize-y min-h-[480px]`}
               placeholder="Write in Markdown..."
               value={form.content}
               onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
             />
           </div>
 
+          {error && (
+            <p className="font-mono text-xs text-red-400">{error}</p>
+          )}
+
           {/* Actions */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px' }}>
-            <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="flex justify-between items-center pt-2">
+            <div className="flex gap-3">
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={saving}
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: 'transparent', color: '#6C7393', border: '1px solid #313244', borderRadius: '3px', cursor: 'pointer' }}
+                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-transparent text-text-muted border border-border rounded cursor-pointer hover:text-text hover:border-border-hover transition-colors disabled:opacity-50"
               >
                 {saving ? 'Saving...' : 'Save Draft'}
               </button>
               <button
                 onClick={() => handleSubmit(true)}
                 disabled={saving}
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: '#89B4FA', color: '#1E2430', border: 'none', borderRadius: '3px', cursor: 'pointer', fontWeight: 500 }}
+                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-accent text-bg border-none rounded cursor-pointer font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
               >
                 {saving ? 'Publishing...' : 'Publish'}
               </button>
@@ -157,7 +153,7 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
             {mode === 'edit' && (
               <button
                 onClick={handleDelete}
-                style={{ fontFamily: 'JetBrains Mono, monospace', fontSize: '12px', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '12px 24px', background: 'transparent', color: '#ff6b6b', border: '1px solid rgba(255,107,107,0.3)', borderRadius: '3px', cursor: 'pointer' }}
+                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-transparent text-red-400 border border-red-400/30 rounded cursor-pointer hover:border-red-400/60 transition-colors"
               >
                 Delete Post
               </button>

@@ -88,7 +88,16 @@ describe('POST /api/posts', () => {
     const data = await response.json()
 
     expect(response.status).toBe(200)
-    expect(prisma.post.create).toHaveBeenCalledWith({ data: postData })
+    expect(prisma.post.create).toHaveBeenCalledWith({
+      data: {
+        title: 'New Post',
+        slug: 'new-post',
+        content: 'Hello world',
+        excerpt: null,
+        tag: null,
+        published: false,
+      }
+    })
     expect(data.slug).toBe('new-post')
   })
 })

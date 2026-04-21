@@ -22,10 +22,25 @@ export async function POST(req: Request) {
   if (!session) return new Response('Unauthorized', { status: 401 })
 
   const body = await req.json()
-  const post = await prisma.post.create({ data: body })
-  
+  const { title, slug, excerpt, tag, content, published } = body
+
+  if (!title || typeof title !== 'string') return new Response('Invalid title', { status: 400 })
+  if (!slug || typeof slug !== 'string') return new Response('Invalid slug', { status: 400 })
+  if (!content || typeof content !== 'string') return new Response('Invalid content', { status: 400 })
+
+  const post = await prisma.post.create({
+    data: {
+      title: title.trim(),
+      slug: slug.trim(),
+      excerpt: typeof excerpt === 'string' ? excerpt.trim() : null,
+      tag: typeof tag === 'string' ? tag.trim() : null,
+      content,
+      published: published === true,
+    }
+  })
+
   revalidatePath('/')
   revalidatePath('/blog')
-  
+
   return Response.json(post)
 }

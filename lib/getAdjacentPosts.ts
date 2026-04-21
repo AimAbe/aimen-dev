@@ -1,16 +1,25 @@
 import { prisma } from '@/lib/db'
 
 export async function getAdjacentPosts(currentSlug: string) {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'asc' },
-    select: { slug: true, title: true },
+  const current = await prisma.post.findUnique({
+    where: { slug: currentSlug, published: true },
+    select: { createdAt: true },
   })
 
-  const index = posts.findIndex((p) => p.slug === currentSlug)
+  if (!current) return { prev: null, next: null }
 
-  return {
-    prev: index > 0 ? posts[index - 1] : null,
-    next: index < posts.length - 1 ? posts[index + 1] : null,
-  }
+  const [prev, next] = await Promise.all([
+    prisma.post.findFirst({
+      where: { published: true, createdAt: { lt: current.createdAt } },
+      orderBy: { createdAt: 'desc' },
+      select: { slug: true, title: true },
+    }),
+    prisma.post.findFirst({
+      where: { published: true, createdAt: { gt: current.createdAt } },
+      orderBy: { createdAt: 'asc' },
+      select: { slug: true, title: true },
+    }),
+  ])
+
+  return { prev, next }
 }
