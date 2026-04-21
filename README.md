@@ -109,7 +109,7 @@ GITHUB_SECRET=your_github_oauth_client_secret
 
 ```bash
 npx prisma db push
-npx npm exec tsx prisma/seed.ts
+npx tsx prisma/seed.ts
 npx prisma studio
 ```
 
@@ -149,6 +149,33 @@ Vercel will build the Next.js app automatically.
 - Comments are created as unapproved and must be approved through the admin moderation UI.
 - Reactions use a browser session cookie to prevent duplicate votes.
 - The admin post editor supports draft and publish flows via `app/admin/components/PostEditor.tsx`.
+
+---
+
+## Testing
+
+Tests are written with [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/). All external dependencies (database, auth, network) are mocked so the suite runs fully in-memory with no infrastructure required.
+
+### Run the test suite
+
+```bash
+npm run test
+```
+
+### What's covered
+
+| Area | Files | What's tested |
+|------|-------|---------------|
+| API — Posts | `posts.test.ts`, `posts-slug.test.ts` | List, create, fetch, update, delete posts; auth guards; cache revalidation |
+| API — Comments | `comments.test.ts`, `comments-id.test.ts` | Submit, fetch, approve, and delete comments; input validation |
+| API — Admin | `admin-comments.test.ts` | Fetch pending comments; auth guards |
+| API — Reactions | `reactions.test.ts` | Fetch counts, create reactions, session cookie handling, duplicate prevention |
+| API — Search | `search.test.ts` | Query validation, full-text search, result limiting |
+| Component — CommentForm | `CommentForm.test.tsx` | Renders, submits, shows loading and success states |
+| Component — ModerationClient | `ModerationClient.test.tsx` | Renders pending comments, approve/delete interactions, empty state |
+| Component — Reactions | `Reactions.test.tsx` | Renders emoji buttons, displays counts, handles clicks |
+| Lib — getAdjacentPosts | `getAdjacentPosts.test.ts` | Prev/next navigation logic including edge cases |
+| Lib — useDebounce | `useDebounce.test.ts` | Debounce timing and rapid-change timer reset |
 
 ---
 
