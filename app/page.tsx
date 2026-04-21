@@ -48,10 +48,13 @@ export default async function HomePage() {
             and build in public. This site is one of those projects.
           </p>
           <div className="hero-cta">
-            <Link href="/blog" className="btn btn-primary">Read the blog →</Link>
+            <a href="#recent-writing" className="btn btn-primary">Read the blog ↓</a>
             <a href="https://github.com/AimAbe" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">GitHub</a>
           </div>
         </div>
+        <a href="#recent-writing" className="hero-scroll-indicator" aria-label="Scroll to recent writing">
+          <span className="hero-scroll-chevron" />
+        </a>
       </section>
 
       {/* ABOUT */}
@@ -78,7 +81,7 @@ export default async function HomePage() {
       </div>
 
       {/* POSTS */}
-      <section className="posts-section">
+      <section id="recent-writing" className="posts-section">
         <div className="section-header">
           <span className="section-title">Recent Writing</span>
           <Link href="/blog" className="section-link">All posts →</Link>
