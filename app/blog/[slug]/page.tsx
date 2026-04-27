@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import rehypeSanitize from 'rehype-sanitize'
 import CommentForm from '@/app/components/CommentForm'
 import CommentsDisplay from '@/app/components/CommentsDisplay'
 import PostNav from '@/app/components/PostNav'
@@ -49,7 +50,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </header>
 
       <article className="prose prose-invert prose-headings:font-serif prose-code:text-[#89B4FA] max-w-none">
-        <ReactMarkdown remarkPlugins={[remarkGfm]}>{post.content}</ReactMarkdown>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>{post.content}</ReactMarkdown>
       </article>
 
       <Reactions postId={post.id} />

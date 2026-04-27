@@ -55,10 +55,10 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...form, published })
           })
-      if (!res.ok) throw new Error(await res.text())
+      if (!res.ok) throw new Error('Failed to save post')
       router.push('/admin')
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Failed to save post. Please try again.')
+    } catch {
+      setError('Failed to save post. Please try again.')
     } finally {
       setSaving(false)
     }
