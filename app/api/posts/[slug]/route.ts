@@ -12,6 +12,12 @@ export async function GET(
   })
 
   if (!post) return new Response('Not found', { status: 404 })
+
+  if (!post.published) {
+    const session = await auth()
+    if (!session) return new Response('Not found', { status: 404 })
+  }
+
   return Response.json(post)
 }
 

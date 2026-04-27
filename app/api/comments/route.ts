@@ -20,8 +20,14 @@ export async function POST(req: Request) {
   const body = await req.json()
   const { slug, author, content } = body
 
-  if (!slug || !author || !content) {
-    return new Response('Missing fields', { status: 400 })
+  if (typeof slug !== 'string' || slug.length < 1 || slug.length > 100) {
+    return new Response('Invalid slug', { status: 400 })
+  }
+  if (typeof author !== 'string' || author.length < 1 || author.length > 100) {
+    return new Response('Invalid author', { status: 400 })
+  }
+  if (typeof content !== 'string' || content.length < 1 || content.length > 5000) {
+    return new Response('Invalid content', { status: 400 })
   }
 
   const comment = await prisma.comment.create({
