@@ -10,23 +10,23 @@ Personal developer blog built with Next.js, Prisma, and GitHub-authenticated adm
 |-------|-----------|
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript |
-| Styling | Tailwind CSS v4 + Typography |
+| Styling | Tailwind CSS v4 |
 | Database | PostgreSQL |
-| ORM | Prisma |
-| Auth | NextAuth.js (GitHub OAuth) |
-| Rendering | `react-markdown` |
+| ORM | Prisma 7 |
+| Auth | NextAuth.js v5 (GitHub OAuth) |
+| Rendering | `react-markdown` + `rehype-sanitize` |
 
 ---
 
 ## Features
 
 - Public blog listing with search
-- Markdown blog posts rendered with `react-markdown`
-- Light/dark mode toggle with theme persistence
+- Markdown posts rendered with `react-markdown` (HTML sanitized via `rehype-sanitize`)
 - Emoji reactions persisted per browser session
 - Comments with moderation workflow
 - Admin dashboard for creating, editing, and publishing posts
 - GitHub login restricted to a configured admin email
+- Admin routes protected by Next.js middleware
 
 ---
 
@@ -37,6 +37,7 @@ aimen-dev/
 ├── app/
 │   ├── admin/
 │   │   ├── comments/page.tsx
+│   │   ├── components/PostEditor.tsx
 │   │   ├── edit/[slug]/page.tsx
 │   │   ├── new/page.tsx
 │   │   └── page.tsx
@@ -50,21 +51,18 @@ aimen-dev/
 │   ├── blog/
 │   │   ├── [slug]/page.tsx
 │   │   └── page.tsx
+│   ├── components/
+│   │   ├── CommentForm.tsx
+│   │   ├── CommentsDisplay.tsx
+│   │   ├── Layout.tsx
+│   │   ├── ModerationClient.tsx
+│   │   ├── PostNav.tsx
+│   │   ├── Reactions.tsx
+│   │   └── Search.tsx
 │   ├── login/page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
 │   └── page.tsx
-├── app/components/
-│   ├── CommentForm.tsx
-│   ├── CommentsDisplay.tsx
-│   ├── Layout.tsx
-│   ├── ModerationClient.tsx
-│   ├── PostNav.tsx
-│   ├── Reactions.tsx
-│   ├── Search.tsx
-│   └── ThemeToggle.tsx
-├── app/providers/
-│   └── ThemeProvider.tsx
 ├── lib/
 │   ├── auth.ts
 │   ├── db.ts
@@ -72,8 +70,9 @@ aimen-dev/
 ├── prisma/
 │   ├── schema.prisma
 │   └── seed.ts
+├── middleware.ts
+├── next.config.ts
 ├── package.json
-├── README.md
 └── tsconfig.json
 ```
 
@@ -89,18 +88,19 @@ aimen-dev/
 ### Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/aimen-dev.git
+git clone https://github.com/AimAbe/aimen-dev.git
 cd aimen-dev
 npm install
 ```
 
 ### Environment Variables
 
-Create a `.env` file in the project root with:
+Create a `.env` file in the project root:
 
 ```bash
 DATABASE_URL=your_postgres_connection_string
 ADMIN_EMAIL=your_admin_github_email
+AUTH_SECRET=your_nextauth_secret        # generate with: npx auth secret
 GITHUB_ID=your_github_oauth_client_id
 GITHUB_SECRET=your_github_oauth_client_secret
 ```
@@ -110,7 +110,7 @@ GITHUB_SECRET=your_github_oauth_client_secret
 ```bash
 npx prisma db push
 npx tsx prisma/seed.ts
-npx prisma studio
+npx prisma studio      # optional: inspect data in browser
 ```
 
 ### Run Locally
@@ -119,76 +119,58 @@ npx prisma studio
 npm run dev
 ```
 
-Visit:
-- `http://localhost:3000`
-- `http://localhost:3000/blog`
-- `http://localhost:3000/blog/[slug]`
-- `http://localhost:3000/login`
-- `http://localhost:3000/admin`
+Key routes:
+- `http://localhost:3000` — home
+- `http://localhost:3000/blog` — post listing
+- `http://localhost:3000/blog/[slug]` — individual post
+- `http://localhost:3000/login` — GitHub OAuth login
+- `http://localhost:3000/admin` — admin dashboard (auth required)
 
 ---
 
 ## Deployment
 
-1. Push your repository to GitHub.
-2. Visit [Vercel](https://vercel.com) and import the repo.
-3. Set the environment variables in Vercel:
+1. Push the repository to GitHub.
+2. Import the repo on [Vercel](https://vercel.com).
+3. Set environment variables in the Vercel dashboard:
    - `DATABASE_URL`
    - `ADMIN_EMAIL`
+   - `AUTH_SECRET`
    - `GITHUB_ID`
    - `GITHUB_SECRET`
-4. Deploy the app.
-
-Vercel will build the Next.js app automatically.
+4. Deploy.
 
 ---
 
 ## Notes
 
-- Admin access is protected with GitHub OAuth and limited to the configured `ADMIN_EMAIL`.
-- Comments are created as unapproved and must be approved through the admin moderation UI.
-- Reactions use a browser session cookie to prevent duplicate votes.
-- The admin post editor supports draft and publish flows via `app/admin/components/PostEditor.tsx`.
+- Admin access is gated by GitHub OAuth — only the configured `ADMIN_EMAIL` can sign in.
+- `middleware.ts` at the project root enforces auth on all `/admin/*` routes.
+- Comments are created unapproved and require manual approval via the admin moderation UI.
+- Reactions use an `httpOnly` session cookie to prevent duplicate votes per browser.
+- Draft posts are only accessible to authenticated admins — unauthenticated requests receive 404.
 
 ---
 
 ## Testing
 
-Tests are written with [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/). All external dependencies (database, auth, network) are mocked so the suite runs fully in-memory with no infrastructure required.
-
-### Run the test suite
+Tests use [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/). All external dependencies (database, auth, network) are mocked — the suite runs fully in-memory with no infrastructure required.
 
 ```bash
 npm run test
 ```
 
-### What's covered
+### Coverage
 
-| Area | Files | What's tested |
-|------|-------|---------------|
-| API — Posts | `posts.test.ts`, `posts-slug.test.ts` | List, create, fetch, update, delete posts; auth guards; cache revalidation |
-| API — Comments | `comments.test.ts`, `comments-id.test.ts` | Submit, fetch, approve, and delete comments; input validation |
-| API — Admin | `admin-comments.test.ts` | Fetch pending comments; auth guards |
-| API — Reactions | `reactions.test.ts` | Fetch counts, create reactions, session cookie handling, duplicate prevention |
-| API — Search | `search.test.ts` | Query validation, full-text search, result limiting |
-| Component — CommentForm | `CommentForm.test.tsx` | Renders, submits, shows loading and success states |
-| Component — ModerationClient | `ModerationClient.test.tsx` | Renders pending comments, approve/delete interactions, empty state |
-| Component — Reactions | `Reactions.test.tsx` | Renders emoji buttons, displays counts, handles clicks |
-| Lib — getAdjacentPosts | `getAdjacentPosts.test.ts` | Prev/next navigation logic including edge cases |
-| Lib — useDebounce | `useDebounce.test.ts` | Debounce timing and rapid-change timer reset |
-
----
-
-## Current Status
-
-The app currently includes:
-
-- Blog pages powered by Prisma with ISR (Incremental Static Regeneration)
-- Markdown post rendering
-- Search on the blog listing
-- Admin dashboard and post editor
-- Comment submission and moderation (with automatic cache revalidation)
-- Emoji reactions
-- GitHub-based admin authentication
-- Light/dark mode toggle with localStorage persistence
-
+| Area | What's tested |
+|------|---------------|
+| API — Posts | List, create, fetch, update, delete; auth guards; draft visibility |
+| API — Comments | Submit, fetch, approve, delete; input validation |
+| API — Admin | Pending comments endpoint; auth guards |
+| API — Reactions | Fetch counts, create reactions, session cookie, duplicate prevention |
+| API — Search | Query validation, full-text search, result limiting |
+| Component — CommentForm | Renders, submits, loading and success states |
+| Component — ModerationClient | Pending list, approve/delete actions, empty state |
+| Component — Reactions | Emoji buttons, counts, click handling |
+| Lib — getAdjacentPosts | Prev/next navigation including edge cases |
+| Lib — useDebounce | Timing and rapid-change timer reset |
