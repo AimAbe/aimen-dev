@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
+import { validateOrigin } from '@/lib/csrf'
 
 // GET /api/reactions?postId=123
 export async function GET(req: Request) {
@@ -20,6 +21,8 @@ export async function GET(req: Request) {
 
 // POST /api/reactions
 export async function POST(req: Request) {
+  if (!validateOrigin(req)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+
   const cookieStore = await cookies()
   let sessionId = cookieStore.get('session_id')?.value
 

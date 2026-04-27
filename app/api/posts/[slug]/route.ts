@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { validateOrigin } from '@/lib/csrf'
 
 export async function GET(
   _req: Request,
@@ -22,6 +23,8 @@ export async function GET(
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const session = await auth()
   if (!session) return new Response('Unauthorized', { status: 401 })
 
@@ -55,7 +58,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ slug: 
   return Response.json(post)
 }
 
-export async function DELETE(_req: Request, { params }: { params: Promise<{ slug: string }> }) {
+export async function DELETE(req: Request, { params }: { params: Promise<{ slug: string }> }) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const session = await auth()
   if (!session) return new Response('Unauthorized', { status: 401 })
 
