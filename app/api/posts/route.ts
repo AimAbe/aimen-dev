@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth'
 import { revalidatePath } from 'next/cache'
+import { validateOrigin } from '@/lib/csrf'
 
 export async function GET() {
   const posts = await prisma.post.findMany({
@@ -18,6 +19,8 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const session = await auth()
   if (!session) return new Response('Unauthorized', { status: 401 })
 

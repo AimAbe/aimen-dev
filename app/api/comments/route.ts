@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/db'
+import { validateOrigin } from '@/lib/csrf'
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url)
@@ -17,6 +18,8 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const body = await req.json()
   const { slug, author, content } = body
 
