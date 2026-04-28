@@ -49,7 +49,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   return (
     <Layout>
-      <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 40px' }}>
+      <div className="r-post-content">
 
         {/* Back link */}
         <Link href="/blog" style={{

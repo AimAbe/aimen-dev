@@ -5,10 +5,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <div style={{ minHeight: '100vh', background: '#141010', color: '#F7F3EE', fontFamily: "'Outfit', sans-serif" }}>
 
       {/* Nav */}
-      <nav style={{
+      <nav className="r-nav" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '16px 40px',
         borderBottom: '1px solid #2A2420',
         background: 'rgba(20,16,16,0.92)',
         backdropFilter: 'blur(12px)',
@@ -47,13 +46,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Footer */}
-      <footer style={{
-        borderTop: '1px solid #2A2420',
-        padding: '20px 40px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-      }}>
+      <footer className="r-footer" style={{ borderTop: '1px solid #2A2420' }}>
         <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65' }}>
           <span style={{ color: '#E8B84B' }}>aimen.dev</span> · built with intention
         </span>

@@ -27,21 +27,13 @@ export default async function HomePage() {
   return (
     <Layout>
       {/* INTRO STRIP */}
-      <div style={{
-        padding: '48px 40px',
-        borderBottom: '1px solid #2A2420',
-        display: 'grid',
-        gridTemplateColumns: '1fr auto',
-        gap: '40px',
-        alignItems: 'start',
-      }}>
+      <div className="r-intro">
         {/* Left */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
             <span style={{
               display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%',
-              background: '#E8B84B',
-              animation: 'pulse 2.5s infinite',
+              background: '#E8B84B', animation: 'pulse 2.5s infinite',
             }} />
             <span style={{
               fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
@@ -71,7 +63,7 @@ export default async function HomePage() {
             and build in public. This site is one of those projects.
           </p>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
             <Link href="/blog" style={{
               fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', fontWeight: 500,
               letterSpacing: '0.06em', padding: '10px 20px', borderRadius: '6px',
@@ -91,33 +83,21 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Right: stats */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-end' }}>
+        {/* Right: stats — hidden on mobile via r-intro-stats */}
+        <div className="r-intro-stats" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-end' }}>
           <div style={{ textAlign: 'right' }}>
-            <div style={{
-              fontFamily: "'Playfair Display', serif", fontSize: '48px',
-              fontWeight: 400, color: '#E8B84B', lineHeight: 1,
-            }}>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '48px', fontWeight: 400, color: '#E8B84B', lineHeight: 1 }}>
               {totalPosts}
             </div>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px',
-            }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px' }}>
               posts
             </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{
-              fontFamily: "'Playfair Display', serif", fontSize: '48px',
-              fontWeight: 400, color: '#E8B84B', lineHeight: 1,
-            }}>
+            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '48px', fontWeight: 400, color: '#E8B84B', lineHeight: 1 }}>
               3
             </div>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px',
-            }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px' }}>
               projects
             </div>
           </div>
@@ -125,36 +105,18 @@ export default async function HomePage() {
       </div>
 
       {/* TWO-COLUMN LAYOUT */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 280px',
-        gap: '1px',
-        background: '#2A2420',
-        minHeight: '400px',
-      }}>
+      <div className="r-two-col" style={{ minHeight: '400px' }}>
         {/* LEFT: Posts */}
         <div style={{ background: '#141010' }}>
-          {/* Column header */}
-          <div style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '16px 24px',
-            borderBottom: '1px solid #2A2420',
-          }}>
-            <span style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#7A6F65', letterSpacing: '0.12em', textTransform: 'uppercase',
-            }}>
+          <div className="r-col-header">
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#7A6F65', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
               Recent Writing
             </span>
-            <Link href="/blog" style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
-              color: '#E8B84B', textDecoration: 'none',
-            }}>
+            <Link href="/blog" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#E8B84B', textDecoration: 'none' }}>
               all posts →
             </Link>
           </div>
 
-          {/* Post rows */}
           {recentPosts.length === 0 ? (
             <div style={{ padding: '32px 24px', fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#7A6F65' }}>
               No posts yet. Check back soon.
@@ -166,25 +128,8 @@ export default async function HomePage() {
               const day = d.getDate()
               const year = d.getFullYear()
               return (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  className="post-row"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '80px 1fr auto',
-                    gap: '16px',
-                    alignItems: 'center',
-                    padding: '20px 24px',
-                    borderBottom: '1px solid #2A2420',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                  }}
-                >
-                  <div style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
-                    color: '#7A6F65', lineHeight: 1.4,
-                  }}>
+                <Link key={post.slug} href={`/blog/${post.slug}`} className="post-row r-post-row">
+                  <div className="r-post-date" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65' }}>
                     {month} {day}<br />{year}
                   </div>
                   <div>
@@ -198,24 +143,16 @@ export default async function HomePage() {
                         {post.tag}
                       </span>
                     )}
-                    <div className="post-title" style={{
-                      fontFamily: "'Outfit', sans-serif", fontSize: '16px', fontWeight: 500,
-                      color: '#F7F3EE', lineHeight: 1.4,
-                    }}>
+                    <div className="post-title" style={{ fontFamily: "'Outfit', sans-serif", fontSize: '16px', fontWeight: 500, color: '#F7F3EE', lineHeight: 1.4 }}>
                       {post.title}
                     </div>
                     {post.excerpt && (
-                      <div style={{
-                        fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300,
-                        color: '#7A6F65', marginTop: '4px',
-                      }}>
+                      <div style={{ fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300, color: '#7A6F65', marginTop: '4px' }}>
                         {post.excerpt}
                       </div>
                     )}
                   </div>
-                  <span className="post-arrow" style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: '14px', color: '#7A6F65',
-                  }}>
+                  <span className="post-arrow" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '14px', color: '#7A6F65' }}>
                     →
                   </span>
                 </Link>
@@ -224,58 +161,34 @@ export default async function HomePage() {
           )}
         </div>
 
-        {/* RIGHT: Sidebar */}
-        <div style={{ background: '#1C1818', padding: '24px' }}>
-          {/* About block */}
+        {/* RIGHT: Sidebar — hidden on mobile via r-sidebar */}
+        <div className="r-sidebar" style={{ background: '#1C1818', padding: '24px' }}>
           <div style={{ marginBottom: '32px' }}>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
-              marginBottom: '12px',
-            }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '12px' }}>
               About
             </div>
-            <p style={{
-              fontFamily: "'Playfair Display', serif", fontSize: '15px',
-              fontStyle: 'italic', color: '#7A6F65', lineHeight: 1.7, margin: 0,
-            }}>
+            <p style={{ fontFamily: "'Playfair Display', serif", fontSize: '15px', fontStyle: 'italic', color: '#7A6F65', lineHeight: 1.7, margin: 0 }}>
               &ldquo;Developer, builder, perpetual learner. Writing about things I&apos;m actively working through — not the things I&apos;ve already mastered.&rdquo;
             </p>
           </div>
 
-          {/* Currently learning */}
           <div style={{ marginBottom: '32px' }}>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
-              marginBottom: '12px',
-            }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '12px' }}>
               Currently Learning
             </div>
             {['Go', 'Docker', 'AWS', 'CI/CD pipelines'].map(item => (
-              <div key={item} style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: '12px',
-                color: '#7A6F65', marginBottom: '6px',
-              }}>
+              <div key={item} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#7A6F65', marginBottom: '6px' }}>
                 <span style={{ color: '#E8B84B', marginRight: '8px' }}>→</span>{item}
               </div>
             ))}
           </div>
 
-          {/* Built with */}
           <div>
-            <div style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
-              marginBottom: '12px',
-            }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '12px' }}>
               Built With
             </div>
             {['Next.js 16', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind CSS v4', 'Vercel'].map(item => (
-              <div key={item} style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: '12px',
-                color: '#7A6F65', marginBottom: '6px',
-              }}>
+              <div key={item} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#7A6F65', marginBottom: '6px' }}>
                 <span style={{ color: '#E8B84B', marginRight: '8px' }}>→</span>{item}
               </div>
             ))}

@@ -25,21 +25,11 @@ export default async function BlogPage() {
   return (
     <Layout>
       {/* TWO-COLUMN LAYOUT */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 280px',
-        gap: '1px',
-        background: '#2A2420',
-        minHeight: 'calc(100vh - 57px)',
-      }}>
+      <div className="r-two-col" style={{ minHeight: 'calc(100vh - 57px)' }}>
         {/* LEFT: Posts */}
         <div style={{ background: '#141010' }}>
           {/* Column header */}
-          <div style={{
-            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-            padding: '16px 24px',
-            borderBottom: '1px solid #2A2420',
-          }}>
+          <div className="r-col-header">
             <span style={{
               fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
               color: '#7A6F65', letterSpacing: '0.12em', textTransform: 'uppercase',
@@ -49,7 +39,7 @@ export default async function BlogPage() {
           </div>
 
           {/* Search */}
-          <div style={{ padding: '16px 24px', borderBottom: '1px solid #2A2420' }}>
+          <div className="r-search-bar">
             <Search />
           </div>
 
@@ -68,19 +58,9 @@ export default async function BlogPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="post-row"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '80px 1fr auto',
-                    gap: '16px',
-                    alignItems: 'center',
-                    padding: '20px 24px',
-                    borderBottom: '1px solid #2A2420',
-                    textDecoration: 'none',
-                    color: 'inherit',
-                  }}
+                  className="post-row r-post-row"
                 >
-                  <div style={{
+                  <div className="r-post-date" style={{
                     fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
                     color: '#7A6F65', lineHeight: 1.4,
                   }}>
@@ -124,7 +104,7 @@ export default async function BlogPage() {
         </div>
 
         {/* RIGHT: Sidebar */}
-        <div style={{ background: '#1C1818', padding: '24px' }}>
+        <div className="r-sidebar" style={{ background: '#1C1818', padding: '24px' }}>
           <div style={{ marginBottom: '32px' }}>
             <div style={{
               fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
