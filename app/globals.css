@@ -101,10 +101,10 @@
     @apply border-l-2 border-accent pl-4 italic text-text-muted my-6;
   }
   .prose code {
-    @apply font-mono text-sm bg-surface text-accent px-1.5 py-0.5 rounded;
+    @apply font-mono text-sm bg-bg-card text-accent px-1.5 py-0.5 rounded;
   }
   .prose pre {
-    @apply bg-surface border border-border rounded-lg p-4 my-6 overflow-x-auto;
+    @apply bg-bg-card border border-border rounded-lg p-4 my-6 overflow-x-auto;
   }
   .prose pre code {
     @apply bg-transparent p-0 text-text-muted;
