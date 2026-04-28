@@ -2,16 +2,40 @@ import { signIn } from '@/lib/auth'
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen bg-bg flex items-center justify-center font-sans">
-      <div className="text-center">
-        <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-4">
+    <div style={{
+      minHeight: '100vh',
+      background: '#141010',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontFamily: "'Outfit', sans-serif",
+    }}>
+      <div style={{ textAlign: 'center' }}>
+        <p style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: '11px',
+          color: '#E8B84B',
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          marginBottom: '16px',
+        }}>
           // admin access
         </p>
-        <h1 className="font-serif text-[40px] font-normal text-text mb-2">
+        <h1 style={{
+          fontFamily: "'Playfair Display', serif",
+          fontSize: '40px',
+          fontWeight: 400,
+          color: '#F7F3EE',
+          margin: '0 0 8px',
+        }}>
           aimen.dev
         </h1>
-        <p className="text-text-muted text-sm mb-10">
-          Sign in to access the admin area
+        <p style={{
+          fontSize: '14px',
+          color: '#7A6F65',
+          margin: '0 0 40px',
+        }}>
+          sign in to access the admin area
         </p>
         <form action={async () => {
           'use server'
@@ -19,12 +43,29 @@ export default function LoginPage() {
         }}>
           <button
             type="submit"
-            className="font-mono text-xs tracking-[0.08em] uppercase px-8 py-3.5 bg-accent text-bg border-none rounded cursor-pointer font-medium hover:opacity-90 transition-opacity"
+            style={{
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: '12px',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+              padding: '12px 32px',
+              background: '#E8B84B',
+              color: '#141010',
+              border: 'none',
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontWeight: 500,
+            }}
           >
             Sign in with GitHub
           </button>
         </form>
-        <p className="mt-6 font-mono text-[10px] text-text-muted">
+        <p style={{
+          marginTop: '24px',
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: '10px',
+          color: '#7A6F65',
+        }}>
           restricted access · admin only
         </p>
       </div>
