@@ -52,8 +52,6 @@
   padding: 48px 40px;
   border-bottom: 1px solid #2A2420;
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 40px;
   align-items: start;
 }
 .r-two-col {
