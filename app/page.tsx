@@ -22,7 +22,6 @@ export default async function HomePage() {
     select: { slug: true, title: true, excerpt: true, tag: true, createdAt: true },
   })
 
-  const totalPosts = await prisma.post.count({ where: { published: true } })
 
   return (
     <Layout>
@@ -83,25 +82,6 @@ export default async function HomePage() {
           </div>
         </div>
 
-        {/* Right: stats — hidden on mobile via r-intro-stats */}
-        <div className="r-intro-stats" style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-end' }}>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '48px', fontWeight: 400, color: '#E8B84B', lineHeight: 1 }}>
-              {totalPosts}
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px' }}>
-              posts
-            </div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontFamily: "'Playfair Display', serif", fontSize: '48px', fontWeight: 400, color: '#E8B84B', lineHeight: 1 }}>
-              3
-            </div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '10px', color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px' }}>
-              projects
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* TWO-COLUMN LAYOUT */}
