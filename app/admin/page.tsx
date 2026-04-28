@@ -79,8 +79,11 @@ export default async function AdminPage() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 flex justify-between items-center">
-          <Link href="/" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← View site</Link>
+        <div className="mt-8 flex justify-between items-center border-t border-border pt-6">
+          <div className="flex gap-6">
+            <Link href="/" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← View site</Link>
+            <Link href="/admin/comments" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">Moderate comments</Link>
+          </div>
           <Link href="/api/auth/signout" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">Sign out</Link>
         </div>
 
