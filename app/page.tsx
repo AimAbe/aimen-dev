@@ -1,7 +1,8 @@
 import Link from 'next/link'
 import { prisma } from '@/lib/db'
+import Layout from '@/app/components/Layout'
 
-export const revalidate = 60 // Revalidate every 60 seconds
+export const revalidate = 60
 
 function getTagClass(tag: string | null): string {
   if (!tag) return 'tag-build'
@@ -9,7 +10,7 @@ function getTagClass(tag: string | null): string {
   if (t.includes('build')) return 'tag-build'
   if (t.includes('deep')) return 'tag-deep'
   if (t.includes('career')) return 'tag-career'
-  if (t.includes('full')) return 'tag-full'
+  if (t.includes('full')) return 'tag-fullstack'
   return 'tag-build'
 }
 
@@ -17,132 +18,277 @@ export default async function HomePage() {
   const recentPosts = await prisma.post.findMany({
     where: { published: true },
     orderBy: { createdAt: 'desc' },
-    take: 5,
-    select: {
-      slug: true,
-      title: true,
-      excerpt: true,
-      tag: true,
-      createdAt: true,
-    },
+    take: 6,
+    select: { slug: true, title: true, excerpt: true, tag: true, createdAt: true },
   })
 
   const totalPosts = await prisma.post.count({ where: { published: true } })
 
   return (
-    <>
-      {/* HERO */}
-      <section className="hero">
-        <div className="hero-glow" />
-        <div className="hero-inner">
-          <div className="hero-eyebrow">
-            <div className="eyebrow-dot" />
-            Hi, I&apos;m Aimen
+    <Layout>
+      {/* INTRO STRIP */}
+      <div style={{
+        padding: '48px 40px',
+        borderBottom: '1px solid #2A2420',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto',
+        gap: '40px',
+        alignItems: 'start',
+      }}>
+        {/* Left */}
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <span style={{
+              display: 'inline-block', width: '6px', height: '6px', borderRadius: '50%',
+              background: '#E8B84B',
+              animation: 'pulse 2.5s infinite',
+            }} />
+            <span style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
+              color: '#E8B84B', letterSpacing: '0.12em', textTransform: 'uppercase',
+            }}>
+              Hi, I&apos;m Aimen
+            </span>
           </div>
-          <h1 className="hero-title">
-            I build things<br />
-            <span className="line2">for the <span className="accent-word">web.</span></span>
+
+          <h1 style={{ margin: '0 0 16px', lineHeight: 1.1 }}>
+            <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: 600, display: 'block' }}>
+              I build things
+            </span>
+            <span style={{
+              fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 46px)',
+              fontWeight: 400, fontStyle: 'italic', color: '#7A6F65', display: 'block',
+            }}>
+              for the web.
+            </span>
           </h1>
-          <p className="hero-sub">
+
+          <p style={{
+            fontFamily: "'Outfit', sans-serif", fontSize: '14px', fontWeight: 300,
+            color: '#7A6F65', maxWidth: '480px', lineHeight: 1.7, margin: '0 0 28px',
+          }}>
             Developer, tinkerer, and occasional writer. I document what I learn
             and build in public. This site is one of those projects.
           </p>
-          <div className="hero-cta">
-            <a href="#recent-writing" className="btn btn-primary">Read the blog ↓</a>
-            <a href="https://github.com/AimAbe" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">GitHub</a>
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <Link href="/blog" style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', fontWeight: 500,
+              letterSpacing: '0.06em', padding: '10px 20px', borderRadius: '6px',
+              background: '#E8B84B', color: '#141010', textDecoration: 'none',
+              border: 'none', display: 'inline-block',
+            }}>
+              Read the blog
+            </Link>
+            <a href="https://github.com/AimAbe" target="_blank" rel="noopener noreferrer" style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', fontWeight: 500,
+              letterSpacing: '0.06em', padding: '10px 20px', borderRadius: '6px',
+              background: 'transparent', color: '#7A6F65', textDecoration: 'none',
+              border: '1px solid #2A2420', display: 'inline-block',
+            }}>
+              GitHub
+            </a>
           </div>
         </div>
-        <a href="#recent-writing" className="hero-scroll-indicator" aria-label="Scroll to recent writing">
-          <span className="hero-scroll-chevron" />
-        </a>
-      </section>
 
-      {/* ABOUT */}
-      <div className="about-strip">
-        <div className="about-cell">
-          <p className="cell-label">who</p>
-          <p className="cell-text">
-            Developer, builder, perpetual learner. I write about things I&apos;m actively working through —
-            <em> not the things I&apos;ve already mastered.</em>
-          </p>
-        </div>
-        <div className="about-cell">
-          <p className="cell-label">stack</p>
-          <p className="cell-text" style={{ fontSize: '15px', fontFamily: 'var(--sans)', fontWeight: 300 }}>Currently building with:</p>
-          <div className="stack-tags">
-            <span className="stack-tag">Next.js</span>
-            <span className="stack-tag">TypeScript</span>
-            <span className="stack-tag">PostgreSQL</span>
-            <span className="stack-tag">Prisma</span>
-            <span className="stack-tag">Tailwind</span>
-            <span className="stack-tag">Vercel</span>
+        {/* Right: stats */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', alignItems: 'flex-end' }}>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{
+              fontFamily: "'Playfair Display', serif", fontSize: '48px',
+              fontWeight: 400, color: '#E8B84B', lineHeight: 1,
+            }}>
+              {totalPosts}
+            </div>
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px',
+            }}>
+              posts
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{
+              fontFamily: "'Playfair Display', serif", fontSize: '48px',
+              fontWeight: 400, color: '#E8B84B', lineHeight: 1,
+            }}>
+              3
+            </div>
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#7A6F65', letterSpacing: '0.1em', textTransform: 'uppercase', marginTop: '4px',
+            }}>
+              projects
+            </div>
           </div>
         </div>
       </div>
 
-      {/* POSTS */}
-      <section id="recent-writing" className="posts-section">
-        <div className="section-header">
-          <span className="section-title">Recent Writing</span>
-          <Link href="/blog" className="section-link">All posts →</Link>
-        </div>
+      {/* TWO-COLUMN LAYOUT */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 280px',
+        gap: '1px',
+        background: '#2A2420',
+        minHeight: '400px',
+      }}>
+        {/* LEFT: Posts */}
+        <div style={{ background: '#141010' }}>
+          {/* Column header */}
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+            padding: '16px 24px',
+            borderBottom: '1px solid #2A2420',
+          }}>
+            <span style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#7A6F65', letterSpacing: '0.12em', textTransform: 'uppercase',
+            }}>
+              Recent Writing
+            </span>
+            <Link href="/blog" style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
+              color: '#E8B84B', textDecoration: 'none',
+            }}>
+              all posts →
+            </Link>
+          </div>
 
-        <div className="post-list">
+          {/* Post rows */}
           {recentPosts.length === 0 ? (
-            <div className="post-card" style={{ justifyContent: 'center' }}>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--muted)' }}>No posts yet. Check back soon.</span>
+            <div style={{ padding: '32px 24px', fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#7A6F65' }}>
+              No posts yet. Check back soon.
             </div>
           ) : (
-            recentPosts.map((post) => (
-              <Link key={post.slug} href={`/blog/${post.slug}`} className="post-card">
-                <div className="post-card-left">
-                  <div className="post-meta">
-                    {post.tag && <span className={`post-tag ${getTagClass(post.tag)}`}>{post.tag}</span>}
-                    <span className="post-date">
-                      {new Date(post.createdAt).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
-                    </span>
+            recentPosts.map((post) => {
+              const d = new Date(post.createdAt)
+              const month = d.toLocaleDateString('en-US', { month: 'short' })
+              const day = d.getDate()
+              const year = d.getFullYear()
+              return (
+                <Link
+                  key={post.slug}
+                  href={`/blog/${post.slug}`}
+                  className="post-row"
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '80px 1fr auto',
+                    gap: '16px',
+                    alignItems: 'center',
+                    padding: '20px 24px',
+                    borderBottom: '1px solid #2A2420',
+                    textDecoration: 'none',
+                    color: 'inherit',
+                  }}
+                >
+                  <div style={{
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
+                    color: '#7A6F65', lineHeight: 1.4,
+                  }}>
+                    {month} {day}<br />{year}
                   </div>
-                  <div className="post-title-text">{post.title}</div>
-                  {post.excerpt && <div className="post-excerpt">{post.excerpt}</div>}
-                </div>
-                <span className="post-arrow">→</span>
-              </Link>
-            ))
+                  <div>
+                    {post.tag && (
+                      <span className={getTagClass(post.tag)} style={{
+                        fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+                        padding: '2px 8px', borderRadius: '3px',
+                        letterSpacing: '0.08em', textTransform: 'uppercase',
+                        display: 'inline-block', marginBottom: '6px',
+                      }}>
+                        {post.tag}
+                      </span>
+                    )}
+                    <div className="post-title" style={{
+                      fontFamily: "'Outfit', sans-serif", fontSize: '16px', fontWeight: 500,
+                      color: '#F7F3EE', lineHeight: 1.4,
+                    }}>
+                      {post.title}
+                    </div>
+                    {post.excerpt && (
+                      <div style={{
+                        fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300,
+                        color: '#7A6F65', marginTop: '4px',
+                      }}>
+                        {post.excerpt}
+                      </div>
+                    )}
+                  </div>
+                  <span className="post-arrow" style={{
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: '14px', color: '#7A6F65',
+                  }}>
+                    →
+                  </span>
+                </Link>
+              )
+            })
           )}
         </div>
-      </section>
 
-      {/* TERMINAL */}
-      <section className="terminal-section">
-        <div className="terminal">
-          <div className="terminal-bar">
-            <div className="t-dot t-red" />
-            <div className="t-dot t-yellow" />
-            <div className="t-dot t-green" />
-            <span className="t-title">~ aimen.dev/whoami</span>
+        {/* RIGHT: Sidebar */}
+        <div style={{ background: '#1C1818', padding: '24px' }}>
+          {/* About block */}
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
+              marginBottom: '12px',
+            }}>
+              About
+            </div>
+            <p style={{
+              fontFamily: "'Playfair Display', serif", fontSize: '15px',
+              fontStyle: 'italic', color: '#7A6F65', lineHeight: 1.7, margin: 0,
+            }}>
+              &ldquo;Developer, builder, perpetual learner. Writing about things I&apos;m actively working through — not the things I&apos;ve already mastered.&rdquo;
+            </p>
           </div>
-          <div className="terminal-body">
-            <p className="t-comment">{'// quick summary'}</p>
-            <br />
-            <p className="t-prompt">cat whoami.json</p>
-            <br />
-            <p>{'{'}</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;name&quot;</span>: <span className="t-str">&quot;Aimen Aberra&quot;</span>,</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;role&quot;</span>: <span className="t-str">&quot;support engineer → enterprise analyst → SRE (in progress)&quot;</span>,</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;currently_learning&quot;</span>: [<span className="t-str">&quot;Go&quot;</span>, <span className="t-str">&quot;Docker&quot;</span>, <span className="t-str">&quot;AWS&quot;</span>, <span className="t-str">&quot;CI/CD&quot;</span>],</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;blog_purpose&quot;</span>: <span className="t-str">&quot;document the journey, not just the destination&quot;</span>,</p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;uses_ai&quot;</span>: <span className="t-val">true</span>, <span className="t-comment">{'// openly and honestly'}</span></p>
-            <p>&nbsp;&nbsp;<span className="t-key">&quot;posts_published&quot;</span>: <span className="t-val">{totalPosts}</span></p>
-            <p>{'}'}</p>
-            <br />
-            <p className="t-prompt"><span className="t-cursor" /></p>
+
+          {/* Currently learning */}
+          <div style={{ marginBottom: '32px' }}>
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
+              marginBottom: '12px',
+            }}>
+              Currently Learning
+            </div>
+            {['Go', 'Docker', 'AWS', 'CI/CD pipelines'].map(item => (
+              <div key={item} style={{
+                fontFamily: "'JetBrains Mono', monospace", fontSize: '12px',
+                color: '#7A6F65', marginBottom: '6px',
+              }}>
+                <span style={{ color: '#E8B84B', marginRight: '8px' }}>→</span>{item}
+              </div>
+            ))}
+          </div>
+
+          {/* Built with */}
+          <div>
+            <div style={{
+              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+              color: '#E8B84B', letterSpacing: '0.14em', textTransform: 'uppercase',
+              marginBottom: '12px',
+            }}>
+              Built With
+            </div>
+            {['Next.js 16', 'TypeScript', 'PostgreSQL', 'Prisma', 'Tailwind CSS v4', 'Vercel'].map(item => (
+              <div key={item} style={{
+                fontFamily: "'JetBrains Mono', monospace", fontSize: '12px',
+                color: '#7A6F65', marginBottom: '6px',
+              }}>
+                <span style={{ color: '#E8B84B', marginRight: '8px' }}>→</span>{item}
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-    </>
+      </div>
+
+      <style>{`
+        @keyframes pulse {
+          0%, 100% { opacity: 1; transform: scale(1); }
+          50% { opacity: 0.4; transform: scale(0.8); }
+        }
+      `}</style>
+    </Layout>
   )
 }

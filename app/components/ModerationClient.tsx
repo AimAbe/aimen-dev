@@ -18,37 +18,43 @@ export default function ModerationClient({ initialComments }: { initialComments:
   }
 
   if (comments.length === 0) {
-    return <p className="text-text-muted text-sm">No pending comments.</p>
+    return (
+      <div className="bg-bg-card border border-border p-10 text-center font-mono text-[13px] text-text-muted">
+        No pending comments.
+      </div>
+    )
   }
 
   return (
-    <ul className="space-y-4">
+    <div className="flex flex-col gap-px bg-border border border-border">
       {comments.map((c) => (
-        <li key={c.id} className="bg-bg-card border border-border rounded-lg p-4">
-          <div className="flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <p className="text-sm font-semibold mb-1">
-                {c.author} on <span className="text-accent">{c.postSlug}</span>
-              </p>
-              <p className="text-sm text-text-muted">{c.content}</p>
+        <div key={c.id} className="bg-bg px-7 py-5 flex items-start justify-between gap-6">
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="font-mono text-[11px] text-accent">{c.author}</span>
+              <span className="font-mono text-[10px] text-text-muted">on {c.postSlug}</span>
+              <span className="font-mono text-[10px] text-text-muted">
+                {new Date(c.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+              </span>
             </div>
-            <div className="flex gap-2 shrink-0">
-              <button
-                onClick={() => approve(c.id)}
-                className="text-xs bg-accent text-bg font-mono font-semibold px-3 py-1.5 rounded-md hover:opacity-90 transition-opacity"
-              >
-                Approve
-              </button>
-              <button
-                onClick={() => remove(c.id)}
-                className="text-xs border border-border text-text-muted font-mono px-3 py-1.5 rounded-md hover:border-border-hover hover:text-text transition-all"
-              >
-                Delete
-              </button>
-            </div>
+            <p className="text-sm text-text-muted leading-6">{c.content}</p>
           </div>
-        </li>
+          <div className="flex gap-2 shrink-0 pt-1">
+            <button
+              onClick={() => approve(c.id)}
+              className="font-mono text-[11px] tracking-[0.06em] uppercase px-4 py-2 bg-accent text-bg rounded cursor-pointer font-medium hover:opacity-90 transition-opacity"
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => remove(c.id)}
+              className="font-mono text-[11px] tracking-[0.06em] uppercase px-4 py-2 bg-transparent text-text-muted border border-border rounded cursor-pointer hover:text-text hover:border-border-hover transition-colors"
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       ))}
-    </ul>
+    </div>
   )
 }
