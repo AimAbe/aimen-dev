@@ -21,7 +21,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         }}>
           aimen<span style={{ color: '#7A6F65' }}>.dev</span>
         </Link>
-        <div style={{ display: 'flex', gap: '28px' }}>
+        {/* <div style={{ display: 'flex', gap: '28px' }}>
           {[
             { label: 'github', href: 'https://github.com/AimAbe' },
           ].map(link => (
@@ -36,7 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               {link.label}
             </Link>
           ))}
-        </div>
+        </div> */}
       </nav>
 
       {/* Page content */}
