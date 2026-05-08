@@ -23,7 +23,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </Link>
         <div style={{ display: 'flex', gap: '28px' }}>
           {[
-            { label: 'blog', href: '/blog' },
             { label: 'github', href: 'https://github.com/AimAbe' },
           ].map(link => (
             <Link key={link.href} href={link.href} style={{
