@@ -25,7 +25,7 @@ export default function LoginPage() {
           fontFamily: "'Lora', serif",
           fontSize: '40px',
           fontWeight: 400,
-          color: '#CDD6F4',
+          color: '#E8F0FE',
           margin: '0 0 8px',
         }}>
           aimen.dev
@@ -48,7 +48,7 @@ export default function LoginPage() {
               fontSize: '12px',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
-              padding: '12px 32px',
+              padding: '14px 32px',
               background: '#89B4FA',
               color: '#1E2430',
               border: 'none',

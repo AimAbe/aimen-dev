@@ -7,11 +7,11 @@
     --surface:   #252D3D;
     --surface2:  #2A3347;
     --border:    #313244;
-    --text:      #CDD6F4;
+    --text:      #E8F0FE;
     --muted:     #6C7393;
     --accent:    #89B4FA;
-    --accent2:   #F38BA8;
-    --accent3:   #A6E3A1;
+    --accent2:   #A6E3A1;
+    --accent3:   #F38BA8;
     --accent4:   #FAB387;
     --mono:      'JetBrains Mono', monospace;
     --sans:      'Sora', sans-serif;
@@ -40,10 +40,10 @@
 
 /* ── RESPONSIVE LAYOUT ── */
 .r-nav {
-  padding: 16px 40px;
+  padding: 20px 48px;
 }
 .r-footer {
-  padding: 20px 40px;
+  padding: 32px 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -67,6 +67,8 @@
   .r-nav { padding: 14px 20px; }
   .r-footer { padding: 20px; flex-direction: column; gap: 16px; align-items: flex-start; }
   .r-post-content { padding: 28px 20px; }
+  .posts-grid { grid-template-columns: 1fr !important; }
+  .post-featured { grid-column: span 1 !important; }
 }
 
 /* ── TAG COLORS ── */
@@ -97,8 +99,89 @@
 
 .post-title { transition: color 0.2s; }
 
-.post-card-hover { background: #1E2430; transition: background 0.25s; }
+/* ── CARD HOVER ── */
+.post-card-hover {
+  background: #1E2430;
+  transition: background 0.25s;
+  position: relative;
+  overflow: hidden;
+}
 .post-card-hover:hover { background: #252D3D; }
+
+.card-line {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: #89B4FA;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.post-card-hover:hover .card-line { transform: scaleX(1); }
+
+.card-arrow { display: inline-block; transition: transform 0.2s ease; }
+.post-card-hover:hover .card-arrow { transform: translateX(4px); }
+
+/* ── POSTS GRID ── */
+.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.post-featured { grid-column: span 2; }
+
+/* ── BG GRID ── */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(137,180,250,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(137,180,250,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ── TICKER ── */
+.ticker-track {
+  display: flex;
+  gap: 48px;
+  animation: ticker 30s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes ticker {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── FADE ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-1 { animation: fadeUp 0.5s ease forwards; }
+.fade-2 { animation: fadeUp 0.5s 0.1s ease forwards; opacity: 0; }
+.fade-3 { animation: fadeUp 0.5s 0.2s ease forwards; opacity: 0; }
+.fade-4 { animation: fadeUp 0.5s 0.3s ease forwards; opacity: 0; }
+
+/* ── STATUS DOT ── */
+.status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #A6E3A1;
+  animation: statusPulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+/* ── FOOTER LINKS ── */
+.footer-link { color: #6C7393; transition: color 0.2s; text-decoration: none; }
+.footer-link:hover { color: #89B4FA; }
 
 /* ── PROSE (blog posts) ── */
 @layer components {
