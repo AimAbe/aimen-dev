@@ -20,13 +20,13 @@ Personal developer blog built with Next.js, Prisma, and GitHub-authenticated adm
 
 ## Features
 
-- Public blog listing with search
+- Minimal homepage that doubles as the post listing, with live search
 - Markdown posts rendered with `react-markdown` (HTML sanitized via `rehype-sanitize`)
 - Emoji reactions persisted per browser session
 - Comments with moderation workflow
 - Admin dashboard for creating, editing, and publishing posts
 - GitHub login restricted to a configured admin email
-- Admin routes protected by Next.js middleware
+- Admin routes protected by Next.js middleware (`proxy.ts`)
 
 ---
 
@@ -49,8 +49,8 @@ aimen-dev/
 │   │   ├── reactions/route.ts
 │   │   └── search/route.ts
 │   ├── blog/
-│   │   ├── [slug]/page.tsx
-│   │   └── page.tsx
+│   │   ├── [slug]/page.tsx   ← individual post
+│   │   └── page.tsx          ← redirects to /
 │   ├── components/
 │   │   ├── CommentForm.tsx
 │   │   ├── CommentsDisplay.tsx
@@ -62,15 +62,17 @@ aimen-dev/
 │   ├── login/page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
-│   └── page.tsx
+│   └── page.tsx              ← homepage + post listing
 ├── lib/
 │   ├── auth.ts
+│   ├── csrf.ts
 │   ├── db.ts
-│   └── getAdjacentPosts.ts
+│   ├── getAdjacentPosts.ts
+│   └── useDebounce.ts
 ├── prisma/
 │   ├── schema.prisma
 │   └── seed.ts
-├── middleware.ts
+├── proxy.ts                  ← Next.js middleware (admin auth)
 ├── next.config.ts
 ├── package.json
 └── tsconfig.json
@@ -120,8 +122,7 @@ npm run dev
 ```
 
 Key routes:
-- `http://localhost:3000` — home
-- `http://localhost:3000/blog` — post listing
+- `http://localhost:3000` — homepage (post listing + search)
 - `http://localhost:3000/blog/[slug]` — individual post
 - `http://localhost:3000/login` — GitHub OAuth login
 - `http://localhost:3000/admin` — admin dashboard (auth required)
@@ -145,7 +146,7 @@ Key routes:
 ## Notes
 
 - Admin access is gated by GitHub OAuth — only the configured `ADMIN_EMAIL` can sign in.
-- `middleware.ts` at the project root enforces auth on all `/admin/*` routes.
+- `proxy.ts` at the project root enforces auth on all `/admin/*` routes (Next.js 16 middleware convention).
 - Comments are created unapproved and require manual approval via the admin moderation UI.
 - Reactions use an `httpOnly` session cookie to prevent duplicate votes per browser.
 - Draft posts are only accessible to authenticated admins — unauthenticated requests receive 404.
