@@ -2,24 +2,24 @@ import Link from 'next/link'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: '100vh', background: '#0D1117', color: '#E6EDF3', fontFamily: "'Outfit', sans-serif" }}>
+    <div style={{ minHeight: '100vh', background: '#1E2430', color: '#CDD6F4', fontFamily: "'Sora', sans-serif" }}>
 
       {/* Nav */}
       <nav className="r-nav" style={{
         position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        borderBottom: '1px solid #30363D',
-        background: 'rgba(13,17,23,0.92)',
+        borderBottom: '1px solid #313244',
+        background: 'rgba(30,36,48,0.92)',
         backdropFilter: 'blur(12px)',
       }}>
         <Link href="/" style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: '13px',
-          color: '#58A6FF',
+          color: '#89B4FA',
           textDecoration: 'none',
           letterSpacing: '0.03em',
         }}>
-          aimen<span style={{ color: '#8B949E' }}>.dev</span>
+          aimen<span style={{ color: '#6C7393' }}>.dev</span>
         </Link>
         {/* <div style={{ display: 'flex', gap: '28px' }}>
           {[
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Link key={link.href} href={link.href} style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
-              color: '#8B949E',
+              color: '#6C7393',
               textDecoration: 'none',
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
@@ -45,9 +45,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Footer */}
-      <footer className="r-footer" style={{ borderTop: '1px solid #30363D' }}>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#8B949E' }}>
-          <span style={{ color: '#58A6FF' }}>aimen.dev</span> · built with intention
+      <footer className="r-footer" style={{ borderTop: '1px solid #313244' }}>
+        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#6C7393' }}>
+          <span style={{ color: '#89B4FA' }}>aimen.dev</span> · built with intention
         </span>
         <div style={{ display: 'flex', gap: '20px' }}>
           {[
@@ -58,7 +58,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <a key={link.href} href={link.href} style={{
               fontFamily: "'JetBrains Mono', monospace",
               fontSize: '11px',
-              color: '#8B949E',
+              color: '#6C7393',
               textDecoration: 'none',
             }}>
               {link.label}
