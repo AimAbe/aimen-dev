@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
+vi.mock('@/lib/csrf', () => ({ validateOrigin: vi.fn().mockReturnValue(true) }))
+
 vi.mock('@/lib/db', () => ({
   prisma: {
     post: {
@@ -29,7 +31,7 @@ describe('GET /api/posts/[slug]', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns a post by slug', async () => {
-    const mockPost = { id: 1, slug: 'test-post', title: 'Test', content: 'Body' }
+    const mockPost = { id: 1, slug: 'test-post', title: 'Test', content: 'Body', published: true }
     vi.mocked(prisma.post.findUnique).mockResolvedValue(mockPost as any)
 
     const req = new Request('http://localhost/api/posts/test-post')

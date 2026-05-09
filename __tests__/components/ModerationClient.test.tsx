@@ -19,8 +19,8 @@ describe('ModerationClient', () => {
 
     expect(screen.getByText('Pending 1')).toBeInTheDocument()
     expect(screen.getByText('Pending 2')).toBeInTheDocument()
-    expect(screen.getByText('post-1')).toBeInTheDocument()
-    expect(screen.getByText('post-2')).toBeInTheDocument()
+    expect(screen.getByText(/post-1/)).toBeInTheDocument()
+    expect(screen.getByText(/post-2/)).toBeInTheDocument()
   })
 
   it('shows empty state when no comments', () => {

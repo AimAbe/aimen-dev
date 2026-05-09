@@ -30,7 +30,7 @@ export default async function HomePage() {
         </div>
 
         {posts.length === 0 ? (
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#7A6F65' }}>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#8B949E' }}>
             No posts yet. Check back soon.
           </div>
         ) : (
@@ -52,11 +52,11 @@ export default async function HomePage() {
                 )}
                 <div className="post-title" style={{
                   fontFamily: "'Outfit', sans-serif", fontSize: '18px', fontWeight: 500,
-                  color: '#F7F3EE', lineHeight: 1.4, marginBottom: '6px',
+                  color: '#E6EDF3', lineHeight: 1.4, marginBottom: '6px',
                 }}>
                   {post.title}
                 </div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#8B949E' }}>
                   {date}
                   {post.excerpt && (
                     <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300 }}>

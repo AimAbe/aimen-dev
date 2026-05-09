@@ -54,7 +54,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* Back link */}
         <Link href="/blog" style={{
           fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
-          color: '#7A6F65', textDecoration: 'none', display: 'inline-block', marginBottom: '40px',
+          color: '#8B949E', textDecoration: 'none', display: 'inline-block', marginBottom: '40px',
         }}>
           ← all posts
         </Link>
@@ -71,7 +71,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
             </span>
           )}
           <time style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65',
+            fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#8B949E',
           }}>
             {new Date(post.createdAt).toLocaleDateString('en-US', {
               year: 'numeric', month: 'long', day: 'numeric',
@@ -85,7 +85,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           fontSize: 'clamp(32px, 5vw, 52px)',
           fontWeight: 400,
           lineHeight: 1.15,
-          color: '#F7F3EE',
+          color: '#E6EDF3',
           margin: '0 0 16px',
         }}>
           {post.title}
@@ -94,7 +94,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         {/* Excerpt */}
         {post.excerpt && (
           <p style={{
-            fontSize: '16px', fontWeight: 300, color: '#7A6F65',
+            fontSize: '16px', fontWeight: 300, color: '#8B949E',
             lineHeight: 1.7, margin: '0 0 32px',
           }}>
             {post.excerpt}
@@ -102,10 +102,10 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         )}
 
         {/* Divider */}
-        <div style={{ height: '1px', background: '#2A2420', margin: '32px 0' }} />
+        <div style={{ height: '1px', background: '#30363D', margin: '32px 0' }} />
 
         {/* Prose content */}
-        <article className="prose prose-invert prose-headings:font-serif prose-code:text-[#E8B84B] max-w-none">
+        <article className="prose prose-invert prose-headings:font-serif prose-code:text-[#58A6FF] max-w-none">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
             {post.content}
           </ReactMarkdown>
@@ -118,7 +118,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <section style={{ marginTop: '64px' }}>
           <h2 style={{
             fontFamily: "'Outfit', sans-serif", fontSize: '18px', fontWeight: 600,
-            color: '#F7F3EE', marginBottom: '24px',
+            color: '#E6EDF3', marginBottom: '24px',
           }}>
             Comments
           </h2>

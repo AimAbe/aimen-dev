@@ -4,7 +4,7 @@ export default function LoginPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#141010',
+      background: '#0D1117',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -14,7 +14,7 @@ export default function LoginPage() {
         <p style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: '11px',
-          color: '#E8B84B',
+          color: '#58A6FF',
           letterSpacing: '0.15em',
           textTransform: 'uppercase',
           marginBottom: '16px',
@@ -25,14 +25,14 @@ export default function LoginPage() {
           fontFamily: "'Playfair Display', serif",
           fontSize: '40px',
           fontWeight: 400,
-          color: '#F7F3EE',
+          color: '#E6EDF3',
           margin: '0 0 8px',
         }}>
           aimen.dev
         </h1>
         <p style={{
           fontSize: '14px',
-          color: '#7A6F65',
+          color: '#8B949E',
           margin: '0 0 40px',
         }}>
           sign in to access the admin area
@@ -49,8 +49,8 @@ export default function LoginPage() {
               letterSpacing: '0.08em',
               textTransform: 'uppercase',
               padding: '12px 32px',
-              background: '#E8B84B',
-              color: '#141010',
+              background: '#58A6FF',
+              color: '#0D1117',
               border: 'none',
               borderRadius: '6px',
               cursor: 'pointer',
@@ -64,7 +64,7 @@ export default function LoginPage() {
           marginTop: '24px',
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: '10px',
-          color: '#7A6F65',
+          color: '#8B949E',
         }}>
           restricted access · admin only
         </p>
