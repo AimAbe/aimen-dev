@@ -85,7 +85,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
           fontSize: 'clamp(32px, 5vw, 52px)',
           fontWeight: 400,
           lineHeight: 1.15,
-          color: '#CDD6F4',
+          color: '#F0F4FF',
           margin: '0 0 16px',
         }}>
           {post.title}
@@ -118,7 +118,7 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
         <section style={{ marginTop: '64px' }}>
           <h2 style={{
             fontFamily: "'Sora', sans-serif", fontSize: '18px', fontWeight: 600,
-            color: '#CDD6F4', marginBottom: '24px',
+            color: '#F0F4FF', marginBottom: '24px',
           }}>
             Comments
           </h2>
