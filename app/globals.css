@@ -78,6 +78,14 @@
   padding: 60px 40px;
 }
 
+.r-home-row {
+  display: block;
+  padding: 20px 0;
+  border-bottom: 1px solid #2A2420;
+  text-decoration: none;
+  color: inherit;
+}
+
 @media (max-width: 768px) {
   .r-nav { padding: 14px 20px; }
   .r-footer { padding: 20px; flex-direction: column; gap: 16px; align-items: flex-start; }

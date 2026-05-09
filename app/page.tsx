@@ -24,49 +24,51 @@ export default async function HomePage() {
 
   return (
     <Layout>
-      <div className="r-search-bar">
-        <Search />
-      </div>
-
-      {posts.length === 0 ? (
-        <div style={{ padding: '32px 40px', fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#7A6F65' }}>
-          No posts yet. Check back soon.
+      <div className="r-post-content" style={{ paddingTop: '32px', paddingBottom: '60px' }}>
+        <div style={{ marginBottom: '32px' }}>
+          <Search />
         </div>
-      ) : (
-        posts.map((post) => {
-          const date = new Date(post.createdAt).toLocaleDateString('en-US', {
-            year: 'numeric', month: 'short', day: 'numeric',
-          })
-          return (
-            <Link key={post.slug} href={`/blog/${post.slug}`} className="post-row r-post-row">
-              {post.tag && (
-                <span className={getTagClass(post.tag)} style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-                  padding: '2px 8px', borderRadius: '3px',
-                  letterSpacing: '0.08em', textTransform: 'uppercase',
-                  display: 'inline-block', marginBottom: '8px',
-                }}>
-                  {post.tag}
-                </span>
-              )}
-              <div className="post-title" style={{
-                fontFamily: "'Outfit', sans-serif", fontSize: '18px', fontWeight: 500,
-                color: '#F7F3EE', lineHeight: 1.4, marginBottom: '6px',
-              }}>
-                {post.title}
-              </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65' }}>
-                {date}
-                {post.excerpt && (
-                  <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300 }}>
-                    {' · '}{post.excerpt}
+
+        {posts.length === 0 ? (
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '13px', color: '#7A6F65' }}>
+            No posts yet. Check back soon.
+          </div>
+        ) : (
+          posts.map((post) => {
+            const date = new Date(post.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric', month: 'short', day: 'numeric',
+            })
+            return (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="post-row r-home-row">
+                {post.tag && (
+                  <span className={getTagClass(post.tag)} style={{
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
+                    padding: '2px 8px', borderRadius: '3px',
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    display: 'inline-block', marginBottom: '8px',
+                  }}>
+                    {post.tag}
                   </span>
                 )}
-              </div>
-            </Link>
-          )
-        })
-      )}
+                <div className="post-title" style={{
+                  fontFamily: "'Outfit', sans-serif", fontSize: '18px', fontWeight: 500,
+                  color: '#F7F3EE', lineHeight: 1.4, marginBottom: '6px',
+                }}>
+                  {post.title}
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#7A6F65' }}>
+                  {date}
+                  {post.excerpt && (
+                    <span style={{ fontFamily: "'Outfit', sans-serif", fontSize: '13px', fontWeight: 300 }}>
+                      {' · '}{post.excerpt}
+                    </span>
+                  )}
+                </div>
+              </Link>
+            )
+          })
+        )}
+      </div>
     </Layout>
   )
 }
