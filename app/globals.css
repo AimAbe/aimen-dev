@@ -3,14 +3,14 @@
 
 @layer base {
   :root {
-    --bg:        #141010;
-    --surface:   #1C1818;
-    --surface2:  #221E1E;
-    --border:    #2A2420;
-    --text:      #F7F3EE;
-    --muted:     #7A6F65;
-    --accent:    #E8B84B;
-    --accent2:   #C47A5A;
+    --bg:        #0D1117;
+    --surface:   #161B22;
+    --surface2:  #1C2128;
+    --border:    #30363D;
+    --text:      #E6EDF3;
+    --muted:     #8B949E;
+    --accent:    #58A6FF;
+    --accent2:   #388BFD;
     --accent3:   #7FB495;
     --accent4:   #8FA8C4;
     --mono:      'JetBrains Mono', monospace;
@@ -58,7 +58,7 @@
 .r-home-row {
   display: block;
   padding: 20px 0;
-  border-bottom: 1px solid #2A2420;
+  border-bottom: 1px solid #30363D;
   text-decoration: none;
   color: inherit;
 }
@@ -70,7 +70,7 @@
 }
 
 /* ── TAG COLORS ── */
-.tag-build     { background: rgba(232,184,75,0.1);  color: #E8B84B; }
+.tag-build     { background: rgba(88,166,255,0.1);  color: #58A6FF; }
 .tag-deep      { background: rgba(127,180,149,0.1); color: #7FB495; }
 .tag-career    { background: rgba(196,122,90,0.1);  color: #C47A5A; }
 .tag-full      { background: rgba(143,168,196,0.1); color: #8FA8C4; }
@@ -86,14 +86,14 @@
   position: absolute;
   left: 0; top: 0; bottom: 0;
   width: 2px;
-  background: #E8B84B;
+  background: #58A6FF;
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.25s ease;
 }
-.post-row:hover { background: #1C1818; }
+.post-row:hover { background: #161B22; }
 .post-row:hover::before { transform: scaleY(1); }
-.post-row:hover .post-title { color: #E8B84B; }
+.post-row:hover .post-title { color: #58A6FF; }
 
 .post-title { transition: color 0.2s; }
 
@@ -158,8 +158,8 @@
 @layer components {
   .tag {
     @apply inline-block text-xs font-mono font-medium px-2.5 py-1 rounded-full border;
-    background: rgba(232,184,75,0.1);
-    color: #E8B84B;
-    border-color: rgba(232,184,75,0.2);
+    background: rgba(88,166,255,0.1);
+    color: #58A6FF;
+    border-color: rgba(88,166,255,0.2);
   }
 }
