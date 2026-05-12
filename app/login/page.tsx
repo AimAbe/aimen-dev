@@ -35,7 +35,7 @@ export default function LoginPage() {
           color: '#6C7393',
           margin: '0 0 40px',
         }}>
-          sign in to access the admin area
+          Sign in to access the admin area
         </p>
         <form action={async () => {
           'use server'
