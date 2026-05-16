@@ -23,7 +23,6 @@ export default function Reactions({ postId }: { postId: number }) {
   const handleReact = async (emoji: string) => {
     if (loading) return
     setLoading(true)
-
     try {
       const res = await fetch('/api/reactions', {
         method: 'POST',
@@ -35,7 +34,7 @@ export default function Reactions({ postId }: { postId: number }) {
       setReactions(updated)
       setReacted(prev => [...prev, emoji])
     } catch {
-      // reaction failed silently — counts stay unchanged
+      // silent
     } finally {
       setLoading(false)
     }
@@ -45,24 +44,20 @@ export default function Reactions({ postId }: { postId: number }) {
     reactions.find(r => r.emoji === emoji)?._count ?? 0
 
   return (
-    <div className="flex gap-2 flex-wrap my-10">
+    <div className="reactions">
       {EMOJIS.map(emoji => {
         const active = reacted.includes(emoji)
+        const count = getCount(emoji)
         return (
           <button
             key={emoji}
             onClick={() => handleReact(emoji)}
             disabled={active}
-            className={`flex items-center gap-1.5 px-3.5 py-2 border rounded-full font-mono text-[13px] transition-all duration-150 ${
-              active
-                ? 'bg-accent-muted border-accent text-accent cursor-default'
-                : 'bg-bg-card border-border text-text-muted cursor-pointer hover:border-accent hover:text-accent'
-            }`}
+            className={`reaction ${active ? 'is-on' : ''}`}
+            aria-label={`react with ${emoji}`}
           >
             <span>{emoji}</span>
-            {getCount(emoji) > 0 && (
-              <span className="text-[11px]">{getCount(emoji)}</span>
-            )}
+            {count > 0 && <span className="count">{count}</span>}
           </button>
         )
       })}

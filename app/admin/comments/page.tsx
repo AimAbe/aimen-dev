@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db'
 import ModerationClient from '@/app/components/ModerationClient'
 import Link from 'next/link'
+import Layout from '@/app/components/Layout'
 
 export default async function AdminCommentsPage() {
   const session = await auth()
@@ -23,31 +24,35 @@ export default async function AdminCommentsPage() {
   }))
 
   return (
-    <main className="min-h-screen bg-bg text-text font-sans p-12">
-      <div className="max-w-[860px] mx-auto">
-
-        <div className="flex justify-between items-center mb-12 border-b border-border pb-6">
-          <div>
-            <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-2">// admin · moderation</p>
-            <h1 className="font-serif text-[36px] font-normal">Comments</h1>
-          </div>
-          <Link href="/admin" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">
-            ← Back to dashboard
-          </Link>
+    <Layout>
+      <div className="admin-head">
+        <div>
+          <p className="t-meta">
+            <span className="t-prompt">$&nbsp;</span>cd ~/aimen.dev/admin/moderation
+          </p>
+          <h1 className="t-h1" style={{ marginTop: 'var(--s-2)' }}>moderation</h1>
         </div>
-
-        <div className="font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-6">
-          Pending review — {comments.length} comment{comments.length !== 1 ? 's' : ''}
-        </div>
-
-        <ModerationClient initialComments={comments} />
-
-        <div className="mt-10 flex justify-between items-center border-t border-border pt-6">
-          <Link href="/" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← View site</Link>
-          <Link href="/api/auth/signout" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">Sign out</Link>
-        </div>
-
+        <Link href="/admin" className="btn">[ ← admin ]</Link>
       </div>
-    </main>
+
+      <p className="t-meta" style={{ marginBottom: 'var(--s-4)' }}>
+        <span className="t-prompt">$&nbsp;</span>find ./comments -unapproved | wc -l
+        <span className="t-mute2"> · </span>
+        {comments.length}
+      </p>
+
+      <ModerationClient initialComments={comments} />
+
+      <hr className="hr-rule" />
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 'var(--s-3)' }}>
+        <Link href="/" className="t-link t-mute" style={{ fontSize: 'var(--fs-sm)' }}>
+          <span className="t-prompt">$&nbsp;</span>cd /
+        </Link>
+        <Link href="/api/auth/signout" className="t-link t-mute" style={{ fontSize: 'var(--fs-sm)' }}>
+          sign out
+        </Link>
+      </div>
+    </Layout>
   )
 }
