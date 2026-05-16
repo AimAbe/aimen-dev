@@ -1,0 +1,107 @@
+import Link from 'next/link'
+import { prisma } from '@/lib/db'
+import Layout from '@/app/components/Layout'
+import Search from '@/app/components/Search'
+
+export const revalidate = 60
+
+function fmtDate(d: Date) {
+  return new Date(d).toISOString().slice(0, 10) // yyyy-mm-dd, lowercase by definition
+}
+
+export default async function HomePage() {
+  const posts = await prisma.post.findMany({
+    where: { published: true },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+    select: { slug: true, title: true, excerpt: true, tag: true, createdAt: true },
+  })
+
+  return (
+    <Layout>
+      {/* Manpage banner */}
+      <pre className="manpage-banner">AIMEN.DEV(7)                                                          AIMEN.DEV(7)</pre>
+
+      {/* NAME */}
+      <section className="man-section">
+        <h2 className="t-h3">NAME</h2>
+        <div className="indent">
+          <p className="t-body">aimen.dev — a developer's notebook, posted to the open web.</p>
+        </div>
+      </section>
+
+      {/* SYNOPSIS */}
+      <section className="man-section">
+        <h2 className="t-h3">SYNOPSIS</h2>
+        <div className="indent">
+          <p className="t-body">
+            <span className="t-prompt">$&nbsp;</span>
+            aimen <span className="t-mute">--topic</span> [build|deep|career|fullstack]
+            {' '}<span className="t-mute">--month</span> [yyyy-mm]
+          </p>
+        </div>
+      </section>
+
+      {/* DESCRIPTION */}
+      <section className="man-section">
+        <h2 className="t-h3">DESCRIPTION</h2>
+        <div className="indent">
+          <p className="t-body">
+            full-stack developer. notes from a self-taught builder shipping side
+            projects no one asked for. long-form posts on what i build, what i break,
+            and what i learn doing it. new posts roughly twice a month. no schedule.
+            no newsletter (yet).
+          </p>
+        </div>
+      </section>
+
+      {/* SEARCH */}
+      <section className="man-section">
+        <h2 className="t-h3">SEARCH</h2>
+        <div className="indent" style={{ maxWidth: 480 }}>
+          <Search />
+        </div>
+      </section>
+
+      {/* POSTS */}
+      {posts.length > 0 && (
+        <section className="man-section">
+          <h2 className="t-h3">POSTS</h2>
+          <div className="man-posts">
+            {posts.map(post => (
+              <Link key={post.slug} href={`/blog/${post.slug}`} className="man-post">
+                <div className="man-post-head">
+                  <span className="t-meta">{fmtDate(post.createdAt)}</span>
+                  {post.tag && (
+                    <>
+                      <span className="t-prompt">·</span>
+                      <span className="t-tag">[{post.tag.toLowerCase()}]</span>
+                    </>
+                  )}
+                </div>
+                <span className="man-post-title">{post.title}</span>
+                {post.excerpt && (
+                  <p className="man-post-excerpt">{post.excerpt}</p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* SEE ALSO */}
+      <section className="man-section">
+        <h2 className="t-h3">SEE ALSO</h2>
+        <div className="indent">
+          <p className="t-body">
+            <a href="https://github.com/AimAbe" className="t-link">github.com/aimabe</a>
+            <span className="t-mute2">  ·  </span>
+            <a href="/feed.xml" className="t-link">/feed.xml</a>
+            <span className="t-mute2">  ·  </span>
+            <a href="mailto:aimen.aberra@gmail.com" className="t-link">aimen.aberra@gmail.com</a>
+          </p>
+        </div>
+      </section>
+    </Layout>
+  )
+}

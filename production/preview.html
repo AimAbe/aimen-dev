@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>aimen.dev — production preview</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- The exact CSS that will deploy to aimen.dev -->
+  <link rel="stylesheet" href="app/globals.css">
+
+  <style>
+    /* preview-only chrome — not part of the production site */
+    .preview-bar {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+      padding: 8px var(--pad-page);
+      display: flex; gap: var(--s-3); align-items: center;
+      font-size: var(--fs-sm);
+      z-index: 100;
+    }
+    .preview-bar .label { color: var(--fg-4); }
+    .preview-bar a {
+      color: var(--fg-3); text-decoration: none;
+      padding: 4px 10px;
+      border: 1px solid transparent;
+      border-radius: var(--r-1);
+      cursor: pointer;
+    }
+    .preview-bar a:hover { color: var(--fg); }
+    .preview-bar a.is-on { color: var(--accent); border-color: var(--accent-dim); }
+    .preview-bar .right { margin-left: auto; display: flex; gap: var(--s-2); }
+    .preview-bar .theme {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg-3);
+      font: inherit;
+      cursor: pointer;
+      border-radius: var(--r-1);
+    }
+    .preview-bar .theme:hover { color: var(--accent); border-color: var(--accent-dim); }
+    body { padding-top: 42px; }
+    .screen { display: none; }
+    .screen.is-on { display: block; }
+
+    /* sample reactions for static preview */
+    .reaction { cursor: default !important; }
+  </style>
+</head>
+<body>
+  <div class="preview-bar">
+    <span class="label">// preview ·</span>
+    <a data-screen="home" class="is-on">home</a>
+    <a data-screen="post">post</a>
+    <a data-screen="login">login</a>
+    <a data-screen="admin">admin</a>
+    <a data-screen="moderation">moderation</a>
+    <a data-screen="editor">editor</a>
+    <div class="right">
+      <button class="theme">[ dark ]</button>
+    </div>
+  </div>
+
+  <!-- ════════════════════ HOME (manpage) ════════════════════ -->
+  <div class="screen is-on" data-screen-label="01 home" id="screen-home">
+    <div class="shell">
+      <header class="site-header">
+        <div class="hdr-row">
+          <a href="#" class="hdr-logo"><span class="prompt">$&nbsp;</span>cd ~/<span class="name">aimen.dev</span></a>
+          <nav class="hdr-nav">
+            <a class="hdr-link is-on">./posts</a>
+            <a class="hdr-link">./feed.xml</a>
+            <a class="hdr-link">github</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="shell-main">
+        <pre class="manpage-banner">AIMEN.DEV(7)                                                          AIMEN.DEV(7)</pre>
+
+        <section class="man-section">
+          <h2 class="t-h3">NAME</h2>
+          <div class="indent">
+            <p class="t-body">aimen.dev — a developer's notebook, posted to the open web.</p>
+          </div>
+        </section>
+
+        <section class="man-section">
+          <h2 class="t-h3">SYNOPSIS</h2>
+          <div class="indent">
+            <p class="t-body">
+              <span class="t-prompt">$&nbsp;</span>aimen <span class="t-mute">--topic</span> [build|deep|career|fullstack] <span class="t-mute">--month</span> [yyyy-mm]
+            </p>
+          </div>
+        </section>
+
+        <section class="man-section">
+          <h2 class="t-h3">DESCRIPTION</h2>
+          <div class="indent">
+            <p class="t-body">
+              full-stack developer. notes from a self-taught builder shipping side
+              projects no one asked for. long-form posts on what i build, what i break,
+              and what i learn doing it. new posts roughly twice a month. no schedule.
+              no newsletter (yet).
+            </p>
+          </div>
+        </section>
+
+        <section class="man-section">
+          <h2 class="t-h3">SEARCH</h2>
+          <div class="indent" style="max-width:480px">
+            <div class="search">
+              <span class="search-prompt" aria-hidden="true">$&nbsp;</span>
+              <input type="text" class="input search-input" placeholder="grep posts/..." />
+            </div>
+          </div>
+        </section>
+
+        <section class="man-section">
+          <h2 class="t-h3">POSTS</h2>
+          <div class="man-posts">
+            <a class="man-post" href="#" onclick="show('post'); return false;">
+              <div class="man-post-head">
+                <span class="t-meta">2026-04-22</span>
+                <span class="t-prompt">·</span>
+                <span class="t-tag">[build log]</span>
+              </div>
+              <span class="man-post-title">shipping side projects with a deadline</span>
+              <p class="man-post-excerpt">the only project i ever finished was the one with a stranger waiting for it. a small playbook for self-imposed pressure that doesn't burn you out.</p>
+            </a>
+            <a class="man-post" href="#" onclick="show('post'); return false;">
+              <div class="man-post-head">
+                <span class="t-meta">2026-03-30</span>
+                <span class="t-prompt">·</span>
+                <span class="t-tag">[deep dive]</span>
+              </div>
+              <span class="man-post-title">git rebase as a thinking tool</span>
+              <p class="man-post-excerpt">i used to be afraid of `rebase -i`. now i use it like a journal. how editing your history makes you a clearer thinker, not just a tidier committer.</p>
+            </a>
+            <a class="man-post" href="#" onclick="show('post'); return false;">
+              <div class="man-post-head">
+                <span class="t-meta">2026-03-12</span>
+                <span class="t-prompt">·</span>
+                <span class="t-tag">[career]</span>
+              </div>
+              <span class="man-post-title">leaving a job without the next one lined up</span>
+              <p class="man-post-excerpt">the conventional advice is: never quit before you have a new offer. i did it twice. here's the actual math, including the part about anxiety.</p>
+            </a>
+            <a class="man-post" href="#" onclick="show('post'); return false;">
+              <div class="man-post-head">
+                <span class="t-meta">2026-02-18</span>
+                <span class="t-prompt">·</span>
+                <span class="t-tag">[fullstack]</span>
+              </div>
+              <span class="man-post-title">postgres row-level security is actually good</span>
+              <p class="man-post-excerpt">i fought rls for two years. i wrote middleware that did the same thing, badly. then i finally read the postgres docs end to end and felt like a fool.</p>
+            </a>
+            <a class="man-post" href="#" onclick="show('post'); return false;">
+              <div class="man-post-head">
+                <span class="t-meta">2026-01-29</span>
+                <span class="t-prompt">·</span>
+                <span class="t-tag">[build log]</span>
+              </div>
+              <span class="man-post-title">the tab bar tax</span>
+              <p class="man-post-excerpt">every time i pick up an old project, the first 20 minutes is closing browser tabs that were holding open thoughts. i finally found a fix.</p>
+            </a>
+          </div>
+        </section>
+
+        <section class="man-section">
+          <h2 class="t-h3">SEE ALSO</h2>
+          <div class="indent">
+            <p class="t-body">
+              <a class="t-link">github.com/aimabe</a>
+              <span class="t-mute2">  ·  </span>
+              <a class="t-link">/feed.xml</a>
+              <span class="t-mute2">  ·  </span>
+              <a class="t-link">aimen.aberra@gmail.com</a>
+            </p>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <div class="ftr-row">
+          <span class="t-meta"><span class="t-mute2">$&nbsp;</span>echo "built with intention" &gt;&gt;&nbsp;aimen.dev</span>
+          <span class="t-meta">
+            <a class="ftr-link">github</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">rss</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">email</a>
+          </span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ════════════════════ POST ════════════════════ -->
+  <div class="screen" data-screen-label="02 post" id="screen-post">
+    <div class="shell">
+      <header class="site-header">
+        <div class="hdr-row">
+          <a class="hdr-logo"><span class="prompt">$&nbsp;</span>cd ~/<span class="name">aimen.dev</span></a>
+          <nav class="hdr-nav">
+            <a class="hdr-link">./posts</a>
+            <a class="hdr-link">./feed.xml</a>
+            <a class="hdr-link">github</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="shell-main">
+        <article class="reader">
+          <div class="reader-bar">
+            <a class="t-link" href="#" onclick="show('home'); return false;"><span class="t-prompt">$&nbsp;</span>cd ..</a>
+            <span class="t-meta">posts/2026/git-rebase-as-a-thinking-tool.md<span class="t-mute2"> · </span>14,203 bytes</span>
+          </div>
+
+          <header class="reader-header">
+            <h1 class="t-h1">git rebase as a thinking tool</h1>
+            <div class="reader-meta">
+              <span class="t-meta">2026-03-30</span>
+              <span class="t-prompt">·</span>
+              <span class="t-tag">[deep dive]</span>
+            </div>
+            <p class="t-body" style="margin-top: var(--s-4); color: var(--fg-3)">i used to be afraid of `rebase -i`. now i use it like a journal. how editing your history makes you a clearer thinker, not just a tidier committer.</p>
+          </header>
+
+          <hr class="hr-rule" />
+
+          <div class="prose">
+            <p>for a long time i thought rebase was for people with stronger opinions about commit history than i had. turns out the opinions came after.</p>
+            <h2>the unlock</h2>
+            <p>the mental shift was treating my branch as a <em>draft</em>, not a record. the first pass of commits is stream-of-consciousness:</p>
+            <pre><code>wip
+wip 2
+ok this works
+forgot the test
+fix the test</code></pre>
+            <p>then before i open the pr, i <code>git rebase -i main</code> and rewrite it into the story i wish i'd told the first time:</p>
+            <pre><code>add scheduler interface
+wire scheduler into queue
+cover scheduler edge cases with tests</code></pre>
+            <h2>what changed</h2>
+            <p>i started planning prs <strong>backwards</strong>. before writing any code i'd jot down the 3-5 commits i wished existed at the end. then i'd just make the mess that gets there.</p>
+            <blockquote>your git log is the spec you wish you'd written first.</blockquote>
+            <p>this is also the cure for the "wait what did i actually change" feeling. you cannot review your own pr clearly if it's 47 unrelated commits.</p>
+          </div>
+
+          <div class="reactions">
+            <button class="reaction"><span>❤️</span><span class="count">12</span></button>
+            <button class="reaction is-on"><span>🔥</span><span class="count">8</span></button>
+            <button class="reaction"><span>🤔</span><span class="count">3</span></button>
+            <button class="reaction"><span>👏</span></button>
+            <button class="reaction"><span>💡</span><span class="count">4</span></button>
+          </div>
+
+          <nav class="post-nav">
+            <div class="col">
+              <a href="#">
+                <span class="lbl"><span class="t-prompt">$&nbsp;</span>cd ../prev</span>
+                <span class="ttl">shipping side projects with a deadline</span>
+              </a>
+            </div>
+            <div class="col right">
+              <a href="#">
+                <span class="lbl">cd ../next<span class="t-prompt">&nbsp;→</span></span>
+                <span class="ttl">leaving a job without the next one lined up</span>
+              </a>
+            </div>
+          </nav>
+
+          <section style="margin-top: var(--s-7)">
+            <h2 class="t-h3" style="text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--s-3)">COMMENTS</h2>
+            <ul class="comments-list">
+              <li class="comment">
+                <div class="comment-head">
+                  <span class="comment-author">marlowe</span>
+                  <span class="comment-date">2026-04-01</span>
+                </div>
+                <p class="comment-body">the "plan the commits backwards" thing changed my prs. last week i wrote the commit titles before the code and the diff came in 40% smaller.</p>
+              </li>
+              <li class="comment">
+                <div class="comment-head">
+                  <span class="comment-author">kira</span>
+                  <span class="comment-date">2026-04-03</span>
+                </div>
+                <p class="comment-body">i still get scared every time i type `--force-with-lease`. but yeah, this is the move.</p>
+              </li>
+            </ul>
+
+            <form class="form" style="margin-top: var(--s-6)">
+              <p class="t-meta"><span class="t-prompt">$&nbsp;</span>leave a comment</p>
+              <div>
+                <label class="form-label">name</label>
+                <input class="input" placeholder="who's writing" />
+              </div>
+              <div>
+                <label class="form-label">comment</label>
+                <textarea class="input" placeholder="markdown ok" rows="5" style="resize: vertical; min-height: 120px"></textarea>
+              </div>
+              <div>
+                <button class="btn btn-primary">[ submit ]</button>
+              </div>
+            </form>
+          </section>
+        </article>
+      </main>
+
+      <footer class="site-footer">
+        <div class="ftr-row">
+          <span class="t-meta"><span class="t-mute2">$&nbsp;</span>echo "built with intention" &gt;&gt;&nbsp;aimen.dev</span>
+          <span class="t-meta">
+            <a class="ftr-link">github</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">rss</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">email</a>
+          </span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ════════════════════ LOGIN ════════════════════ -->
+  <div class="screen" data-screen-label="03 login" id="screen-login">
+    <div style="min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: var(--s-4)">
+      <div style="max-width: 480px; width: 100%">
+<pre class="ascii-logo">
+   __ _(_)_ __ ___   ___ _ __    __| | _____   __
+  / _` | | '_ ` _ \ / _ \ '_ \  / _` |/ _ \ \ / /
+ | (_| | | | | | | |  __/ | | || (_| |  __/\ V /
+  \__,_|_|_| |_| |_|\___|_| |_(_)__,_|\___| \_/
+</pre>
+
+        <p class="t-meta" style="margin-bottom: var(--s-4)"><span class="t-prompt">$&nbsp;</span>sudo login --admin</p>
+        <hr class="hr-rule" />
+        <p class="t-body" style="margin-bottom: var(--s-5)">restricted access. github oauth — only the configured admin email may sign in.</p>
+        <button class="btn btn-primary">[ sign in with github ]</button>
+        <p class="t-meta" style="margin-top: var(--s-5)"><span class="t-mute2">// </span>everyone else: nothing to see here. <a class="t-link" href="#" onclick="show('home'); return false;">cd /</a></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════ ADMIN (ls -la) ════════════════════ -->
+  <div class="screen" data-screen-label="04 admin" id="screen-admin">
+    <div class="shell">
+      <header class="site-header">
+        <div class="hdr-row">
+          <a class="hdr-logo"><span class="prompt">$&nbsp;</span>cd ~/<span class="name">aimen.dev</span></a>
+          <nav class="hdr-nav">
+            <a class="hdr-link">./posts</a>
+            <a class="hdr-link">./feed.xml</a>
+            <a class="hdr-link">github</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="shell-main">
+        <div class="admin-head">
+          <div>
+            <p class="t-meta"><span class="t-prompt">$&nbsp;</span>cd ~/aimen.dev/admin</p>
+            <h1 class="t-h1" style="margin-top: var(--s-2)">posts</h1>
+          </div>
+          <div style="display:flex; gap: var(--s-3)">
+            <a class="btn" href="#" onclick="show('moderation'); return false;">[ moderate ]</a>
+            <a class="btn btn-primary" href="#" onclick="show('editor'); return false;">[ + new post ]</a>
+          </div>
+        </div>
+
+        <div class="admin-stats">
+          <div class="admin-stat">
+            <p class="k">total posts</p><p class="v">12</p>
+          </div>
+          <div class="admin-stat">
+            <p class="k">published</p><p class="v">9</p>
+          </div>
+          <div class="admin-stat">
+            <p class="k">drafts</p><p class="v">3</p>
+          </div>
+        </div>
+
+        <p class="t-meta" style="margin-bottom: var(--s-1)"><span class="t-prompt">$&nbsp;</span>ls -la ~/posts</p>
+        <p class="t-meta" style="margin-bottom: var(--s-3); border-bottom: 1px dashed var(--border); padding-bottom: var(--s-2)">total 12</p>
+
+        <table class="ls-table">
+          <thead>
+            <tr>
+              <th>status</th><th>date</th><th class="num">bytes</th><th>name</th><th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><span class="status is-on">published</span></td>
+              <td class="t-meta">2026-04-22</td>
+              <td class="t-meta num">8,421</td>
+              <td>
+                <a class="ls-name" href="#" onclick="show('editor'); return false;">shipping-side-projects-deadline.md</a>
+                <div class="ls-sub"><span class="t-meta">shipping side projects with a deadline</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+            <tr>
+              <td><span class="status is-on">published</span></td>
+              <td class="t-meta">2026-03-30</td>
+              <td class="t-meta num">14,203</td>
+              <td>
+                <a class="ls-name">git-rebase-as-a-thinking-tool.md</a>
+                <div class="ls-sub"><span class="t-meta">git rebase as a thinking tool</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+            <tr>
+              <td><span class="status is-warn">draft</span></td>
+              <td class="t-meta">2026-04-30</td>
+              <td class="t-meta num">2,841</td>
+              <td>
+                <a class="ls-name">deno-vs-bun-after-six-months.md</a>
+                <div class="ls-sub"><span class="t-meta">deno vs bun after six months</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+            <tr>
+              <td><span class="status is-on">published</span></td>
+              <td class="t-meta">2026-03-12</td>
+              <td class="t-meta num">9,622</td>
+              <td>
+                <a class="ls-name">leaving-a-job-without-the-next-one-lined-up.md</a>
+                <div class="ls-sub"><span class="t-meta">leaving a job without the next one lined up</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+            <tr>
+              <td><span class="status is-on">published</span></td>
+              <td class="t-meta">2026-02-18</td>
+              <td class="t-meta num">21,044</td>
+              <td>
+                <a class="ls-name">postgres-rls-is-actually-good.md</a>
+                <div class="ls-sub"><span class="t-meta">postgres row-level security is actually good</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+            <tr>
+              <td><span class="status is-warn">draft</span></td>
+              <td class="t-meta">2026-04-26</td>
+              <td class="t-meta num">684</td>
+              <td>
+                <a class="ls-name">scratch-notes-on-zustand.md</a>
+                <div class="ls-sub"><span class="t-meta">scratch notes on zustand</span></div>
+              </td>
+              <td><a class="t-link" style="font-size: var(--fs-sm)">[ edit ]</a></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <hr class="hr-rule" />
+
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-3)">
+          <div style="display: flex; gap: var(--s-4)">
+            <a class="t-link t-mute" style="font-size: var(--fs-sm)" href="#" onclick="show('home'); return false;"><span class="t-prompt">$&nbsp;</span>cd /</a>
+            <a class="t-link t-mute" style="font-size: var(--fs-sm)" href="#" onclick="show('moderation'); return false;">moderate comments</a>
+          </div>
+          <a class="t-link t-mute" style="font-size: var(--fs-sm)">sign out</a>
+        </div>
+      </main>
+
+      <footer class="site-footer">
+        <div class="ftr-row">
+          <span class="t-meta"><span class="t-mute2">$&nbsp;</span>echo "built with intention" &gt;&gt;&nbsp;aimen.dev</span>
+          <span class="t-meta">
+            <a class="ftr-link">github</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">rss</a><span class="t-mute2"> · </span>
+            <a class="ftr-link">email</a>
+          </span>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ════════════════════ MODERATION ════════════════════ -->
+  <div class="screen" data-screen-label="05 moderation" id="screen-moderation">
+    <div class="shell">
+      <header class="site-header">
+        <div class="hdr-row">
+          <a class="hdr-logo"><span class="prompt">$&nbsp;</span>cd ~/<span class="name">aimen.dev</span></a>
+          <nav class="hdr-nav">
+            <a class="hdr-link">./posts</a>
+            <a class="hdr-link">./feed.xml</a>
+            <a class="hdr-link">github</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="shell-main">
+        <div class="admin-head">
+          <div>
+            <p class="t-meta"><span class="t-prompt">$&nbsp;</span>cd ~/aimen.dev/admin/moderation</p>
+            <h1 class="t-h1" style="margin-top: var(--s-2)">moderation</h1>
+          </div>
+          <a class="btn" href="#" onclick="show('admin'); return false;">[ ← admin ]</a>
+        </div>
+
+        <p class="t-meta" style="margin-bottom: var(--s-4)"><span class="t-prompt">$&nbsp;</span>find ./comments -unapproved | wc -l<span class="t-mute2"> · </span>3</p>
+
+        <ul class="comments-list" style="border-top: 1px dashed var(--border)">
+          <li class="comment" style="display: flex; justify-content: space-between; gap: var(--s-4); align-items: flex-start">
+            <div style="flex: 1; min-width: 0">
+              <div class="comment-head">
+                <span class="comment-author">someone-anonymous</span>
+                <span class="t-meta">on /blog/postgres-rls-is-actually-good</span>
+                <span class="comment-date">2026-05-12</span>
+              </div>
+              <p class="comment-body">this post saved me a week. i was about to write the same middleware. switched to rls in an afternoon and deleted ~600 lines of auth code.</p>
+            </div>
+            <div style="display: flex; gap: var(--s-2); flex-shrink: 0">
+              <button class="btn btn-primary">[ approve ]</button>
+              <button class="btn">[ delete ]</button>
+            </div>
+          </li>
+          <li class="comment" style="display: flex; justify-content: space-between; gap: var(--s-4); align-items: flex-start">
+            <div style="flex: 1; min-width: 0">
+              <div class="comment-head">
+                <span class="comment-author">first-time-poster</span>
+                <span class="t-meta">on /blog/git-rebase-as-a-thinking-tool</span>
+                <span class="comment-date">2026-05-11</span>
+              </div>
+              <p class="comment-body">do you ever rebase shared branches? our team rule is "never" but i'm starting to suspect the rule is dumb.</p>
+            </div>
+            <div style="display: flex; gap: var(--s-2); flex-shrink: 0">
+              <button class="btn btn-primary">[ approve ]</button>
+              <button class="btn">[ delete ]</button>
+            </div>
+          </li>
+          <li class="comment" style="display: flex; justify-content: space-between; gap: var(--s-4); align-items: flex-start">
+            <div style="flex: 1; min-width: 0">
+              <div class="comment-head">
+                <span class="comment-author">offer-spam-bot-42</span>
+                <span class="t-meta">on /blog/shipping-side-projects-deadline</span>
+                <span class="comment-date">2026-05-10</span>
+              </div>
+              <p class="comment-body">amazing post! check out my crypto course at example-spam-domain dot com — limited offer!</p>
+            </div>
+            <div style="display: flex; gap: var(--s-2); flex-shrink: 0">
+              <button class="btn btn-primary">[ approve ]</button>
+              <button class="btn">[ delete ]</button>
+            </div>
+          </li>
+        </ul>
+
+        <hr class="hr-rule" />
+
+        <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--s-3)">
+          <a class="t-link t-mute" style="font-size: var(--fs-sm)" href="#" onclick="show('home'); return false;"><span class="t-prompt">$&nbsp;</span>cd /</a>
+          <a class="t-link t-mute" style="font-size: var(--fs-sm)">sign out</a>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- ════════════════════ EDITOR ════════════════════ -->
+  <div class="screen" data-screen-label="06 editor" id="screen-editor">
+    <div class="shell">
+      <header class="site-header">
+        <div class="hdr-row">
+          <a class="hdr-logo"><span class="prompt">$&nbsp;</span>cd ~/<span class="name">aimen.dev</span></a>
+          <nav class="hdr-nav">
+            <a class="hdr-link">./posts</a>
+            <a class="hdr-link">./feed.xml</a>
+            <a class="hdr-link">github</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="shell-main">
+        <div class="admin-head">
+          <div>
+            <p class="t-meta"><span class="t-prompt">$&nbsp;</span>vim posts/git-rebase-as-a-thinking-tool.md</p>
+            <h1 class="t-h1" style="margin-top: var(--s-2)">git rebase as a thinking tool</h1>
+          </div>
+          <a class="btn" href="#" onclick="show('admin'); return false;">[ ← back ]</a>
+        </div>
+
+        <div class="form">
+          <div class="form-row two">
+            <div>
+              <label class="form-label">title</label>
+              <input class="input" value="git rebase as a thinking tool" />
+            </div>
+            <div>
+              <label class="form-label">slug</label>
+              <input class="input" value="git-rebase-as-a-thinking-tool" />
+            </div>
+          </div>
+          <div class="form-row three-one">
+            <div>
+              <label class="form-label">excerpt</label>
+              <input class="input" value="i used to be afraid of `rebase -i`. now i use it like a journal." />
+            </div>
+            <div>
+              <label class="form-label">tag</label>
+              <input class="input" value="deep dive" />
+            </div>
+          </div>
+          <div>
+            <label class="form-label">content (markdown)</label>
+            <textarea class="input" rows="14" style="min-height: 320px; resize: vertical; font-size: var(--fs-sm); line-height: 1.7"># the unlock
+
+the mental shift was treating my branch as a *draft*, not a record.
+the first pass of commits is stream-of-consciousness:
+
+```
+wip
+wip 2
+ok this works
+forgot the test
+fix the test
+```
+
+then before i open the pr, i `git rebase -i main` and rewrite it
+into the story i wish i'd told the first time.
+
+## what changed
+
+i started planning prs **backwards**. before writing any code i'd
+jot down the 3-5 commits i wished existed at the end. then i'd just
+make the mess that gets there.</textarea>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; gap: var(--s-3); flex-wrap: wrap; margin-top: var(--s-3)">
+            <div style="display: flex; gap: var(--s-2)">
+              <button class="btn">[ save draft ]</button>
+              <button class="btn btn-primary">[ publish ]</button>
+            </div>
+            <button class="btn" style="color: var(--err); border-color: var(--err)">[ delete post ]</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    function show(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('is-on'));
+      document.querySelector('#screen-' + name).classList.add('is-on');
+      document.querySelectorAll('.preview-bar a[data-screen]').forEach(a => {
+        a.classList.toggle('is-on', a.dataset.screen === name);
+      });
+      window.scrollTo(0, 0);
+    }
+    document.querySelectorAll('.preview-bar a[data-screen]').forEach(a => {
+      a.addEventListener('click', e => { e.preventDefault(); show(a.dataset.screen); });
+    });
+
+    // Theme toggle
+    const themeBtn = document.querySelector('.preview-bar .theme');
+    function paintTheme() {
+      const t = document.documentElement.dataset.theme;
+      themeBtn.textContent = '[ ' + t + ' ]';
+    }
+    paintTheme();
+    themeBtn.addEventListener('click', () => {
+      document.documentElement.dataset.theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      paintTheme();
+    });
+  </script>
+</body>
+</html>
