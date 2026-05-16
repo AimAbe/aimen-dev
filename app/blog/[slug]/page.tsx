@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import Link from 'next/link'
 import { prisma } from '@/lib/db'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -8,7 +9,6 @@ import CommentsDisplay from '@/app/components/CommentsDisplay'
 import PostNav from '@/app/components/PostNav'
 import Reactions from '@/app/components/Reactions'
 import Layout from '@/app/components/Layout'
-import Link from 'next/link'
 
 export const revalidate = 60
 
@@ -20,14 +20,8 @@ export async function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }))
 }
 
-function getTagClass(tag: string | null): string {
-  if (!tag) return 'tag-build'
-  const t = tag.toLowerCase()
-  if (t.includes('build')) return 'tag-build'
-  if (t.includes('deep')) return 'tag-deep'
-  if (t.includes('career')) return 'tag-career'
-  if (t.includes('full')) return 'tag-fullstack'
-  return 'tag-build'
+function fmtDate(d: Date) {
+  return new Date(d).toISOString().slice(0, 10)
 }
 
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -47,65 +41,46 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
   if (!post) notFound()
 
+  const bytes = new TextEncoder().encode(post.content).length
+
   return (
     <Layout>
-      <div className="r-post-content">
-
-        {/* Back link */}
-        <Link href="/blog" style={{
-          fontFamily: "'JetBrains Mono', monospace", fontSize: '11px',
-          color: '#6C7393', textDecoration: 'none', display: 'inline-block', marginBottom: '40px',
-        }}>
-          ← all posts
-        </Link>
-
-        {/* Tag + date */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px' }}>
-          {post.tag && (
-            <span className={getTagClass(post.tag)} style={{
-              fontFamily: "'JetBrains Mono', monospace", fontSize: '10px',
-              padding: '2px 8px', borderRadius: '3px',
-              letterSpacing: '0.08em', textTransform: 'uppercase',
-            }}>
-              {post.tag}
-            </span>
-          )}
-          <time style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: '11px', color: '#6C7393',
-          }}>
-            {new Date(post.createdAt).toLocaleDateString('en-US', {
-              year: 'numeric', month: 'long', day: 'numeric',
-            })}
-          </time>
+      <article className="reader">
+        {/* Reader bar */}
+        <div className="reader-bar">
+          <Link href="/" className="t-link">
+            <span className="t-prompt">$&nbsp;</span>cd ..
+          </Link>
+          <span className="t-meta">
+            posts/{fmtDate(post.createdAt).slice(0, 4)}/{slug}.md
+            <span className="t-mute2"> · </span>
+            {bytes.toLocaleString()} bytes
+          </span>
         </div>
 
-        {/* Title */}
-        <h1 style={{
-          fontFamily: "'Lora', serif",
-          fontSize: 'clamp(32px, 5vw, 52px)',
-          fontWeight: 400,
-          lineHeight: 1.15,
-          color: '#F0F4FF',
-          margin: '0 0 16px',
-        }}>
-          {post.title}
-        </h1>
+        {/* Header */}
+        <header className="reader-header">
+          <h1 className="t-h1">{post.title}</h1>
+          <div className="reader-meta">
+            <span className="t-meta">{fmtDate(post.createdAt)}</span>
+            {post.tag && (
+              <>
+                <span className="t-prompt">·</span>
+                <span className="t-tag">[{post.tag.toLowerCase()}]</span>
+              </>
+            )}
+          </div>
+          {post.excerpt && (
+            <p className="t-body" style={{ marginTop: 'var(--s-4)', color: 'var(--fg-3)' }}>
+              {post.excerpt}
+            </p>
+          )}
+        </header>
 
-        {/* Excerpt */}
-        {post.excerpt && (
-          <p style={{
-            fontSize: '16px', fontWeight: 300, color: '#6C7393',
-            lineHeight: 1.7, margin: '0 0 32px',
-          }}>
-            {post.excerpt}
-          </p>
-        )}
+        <hr className="hr-rule" />
 
-        {/* Divider */}
-        <div style={{ height: '1px', background: '#313244', margin: '32px 0' }} />
-
-        {/* Prose content */}
-        <article className="prose prose-invert prose-headings:font-serif prose-code:text-[#89B4FA] max-w-none">
+        {/* Body */}
+        <article className="prose">
           <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeSanitize]}>
             {post.content}
           </ReactMarkdown>
@@ -115,18 +90,15 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
 
         <PostNav currentSlug={slug} />
 
-        <section style={{ marginTop: '64px' }}>
-          <h2 style={{
-            fontFamily: "'Sora', sans-serif", fontSize: '18px', fontWeight: 600,
-            color: '#F0F4FF', marginBottom: '24px',
-          }}>
-            Comments
+        {/* Comments */}
+        <section style={{ marginTop: 'var(--s-7)' }}>
+          <h2 className="t-h3" style={{ textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 'var(--s-3)' }}>
+            COMMENTS
           </h2>
           <CommentsDisplay slug={slug} />
           <CommentForm slug={slug} />
         </section>
-
-      </div>
+      </article>
     </Layout>
   )
 }

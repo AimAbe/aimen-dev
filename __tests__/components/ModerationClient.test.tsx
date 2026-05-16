@@ -26,14 +26,14 @@ describe('ModerationClient', () => {
   it('shows empty state when no comments', () => {
     render(<ModerationClient initialComments={[]} />)
 
-    expect(screen.getByText('No pending comments.')).toBeInTheDocument()
+    expect(screen.getByText(/queue empty/i)).toBeInTheDocument()
   })
 
   it('approves a comment and removes it from the list', async () => {
     const user = userEvent.setup()
     render(<ModerationClient initialComments={mockComments} />)
 
-    const approveButtons = screen.getAllByRole('button', { name: 'Approve' })
+    const approveButtons = screen.getAllByRole('button', { name: '[ approve ]' })
     await user.click(approveButtons[0])
 
     await waitFor(() => {
@@ -50,7 +50,7 @@ describe('ModerationClient', () => {
     const user = userEvent.setup()
     render(<ModerationClient initialComments={mockComments} />)
 
-    const deleteButtons = screen.getAllByRole('button', { name: 'Delete' })
+    const deleteButtons = screen.getAllByRole('button', { name: '[ delete ]' })
     await user.click(deleteButtons[0])
 
     await waitFor(() => {
@@ -66,11 +66,11 @@ describe('ModerationClient', () => {
     const user = userEvent.setup()
     render(<ModerationClient initialComments={[mockComments[0]]} />)
 
-    const approveButton = screen.getByRole('button', { name: 'Approve' })
+    const approveButton = screen.getByRole('button', { name: '[ approve ]' })
     await user.click(approveButton)
 
     await waitFor(() => {
-      expect(screen.getByText('No pending comments.')).toBeInTheDocument()
+      expect(screen.getByText(/queue empty/i)).toBeInTheDocument()
     })
   })
 })

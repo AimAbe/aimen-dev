@@ -20,7 +20,6 @@ export default function Search() {
       setOpen(false)
       return
     }
-
     setLoading(true)
     fetch(`/api/search?q=${encodeURIComponent(debouncedQuery)}`)
       .then((r) => r.json())
@@ -37,48 +36,43 @@ export default function Search() {
         setOpen(false)
       }
     }
-
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
 
   return (
-    <div ref={ref} className="relative w-full max-w-sm">
+    <div ref={ref} className="search">
+      <span className="search-prompt" aria-hidden="true">$&nbsp;</span>
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search posts..."
-        className="w-full bg-bg-card border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors"
+        placeholder="grep posts/..."
+        className="input search-input"
+        aria-label="search posts"
       />
       {open && (
-        <div className="absolute top-full mt-2 w-full bg-bg-card border border-border rounded-lg shadow-xl z-50 animate-in overflow-hidden">
+        <div className="search-drop">
           {loading && (
-            <div className="p-4 space-y-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="h-4 bg-bg-hover rounded animate-pulse" />
-              ))}
-            </div>
+            <p className="empty">
+              <span className="t-prompt">…&nbsp;</span>searching
+            </p>
           )}
           {!loading && results.length === 0 && (
-            <p className="p-4 text-sm text-text-dim">No results for "{query}"</p>
+            <p className="empty">
+              <span className="t-prompt">!&nbsp;</span>no results for "{query}"
+            </p>
           )}
           {!loading && results.length > 0 && (
             <ul>
               {results.map((r) => (
                 <li key={r.slug}>
-                  <Link
-                    href={`/blog/${r.slug}`}
-                    onClick={() => setOpen(false)}
-                    className="flex flex-col gap-0.5 px-4 py-3 hover:bg-bg-hover transition-colors"
-                  >
-                    <div className="flex items-center gap-2">
-                      {r.tag && <span className="tag text-[10px]">{r.tag}</span>}
-                      <span className="text-sm font-semibold">{r.title}</span>
+                  <Link href={`/blog/${r.slug}`} onClick={() => setOpen(false)}>
+                    <div className="row">
+                      <span className="name">{r.title}</span>
+                      {r.tag && <span className="t-tag">[{r.tag.toLowerCase()}]</span>}
                     </div>
-                    {r.excerpt && (
-                      <span className="text-xs text-text-dim truncate">{r.excerpt}</span>
-                    )}
+                    {r.excerpt && <div className="ex">{r.excerpt}</div>}
                   </Link>
                 </li>
               ))}

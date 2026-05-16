@@ -1,6 +1,8 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import Layout from '@/app/components/Layout'
 
 type PostForm = {
   title: string
@@ -20,9 +22,6 @@ type Props = {
 const defaultForm: PostForm = {
   title: '', slug: '', excerpt: '', tag: '', content: '', published: false
 }
-
-const inputClass = 'w-full bg-bg-card border border-border rounded px-4 py-3 text-text font-sans text-sm outline-none focus:border-accent transition-colors'
-const labelClass = 'font-mono text-[10px] text-text-muted tracking-[0.12em] uppercase mb-2 block'
 
 export default function PostEditor({ initialForm = defaultForm, originalSlug = '', mode }: Props) {
   const router = useRouter()
@@ -55,112 +54,121 @@ export default function PostEditor({ initialForm = defaultForm, originalSlug = '
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...form, published })
           })
-      if (!res.ok) throw new Error('Failed to save post')
+      if (!res.ok) throw new Error()
       router.push('/admin')
     } catch {
-      setError('Failed to save post. Please try again.')
+      setError('failed to save. try again.')
     } finally {
       setSaving(false)
     }
   }
 
   const handleDelete = async () => {
-    if (!confirm('Delete this post? This cannot be undone.')) return
+    if (!confirm('delete this post? cannot be undone.')) return
     try {
       const res = await fetch(`/api/posts/${originalSlug}`, { method: 'DELETE' })
       if (!res.ok) throw new Error()
       router.push('/admin')
     } catch {
-      setError('Failed to delete post. Please try again.')
+      setError('failed to delete. try again.')
     }
   }
 
   return (
-    <main className="min-h-screen bg-bg text-text font-sans p-12">
-      <div className="max-w-[860px] mx-auto">
-
-        {/* Header */}
-        <div className="flex justify-between items-center mb-10 border-b border-border pb-6">
-          <div>
-            <p className="font-mono text-[11px] text-accent tracking-[0.15em] uppercase mb-2">
-              // {mode === 'new' ? 'new post' : 'edit post'}
-            </p>
-            <h1 className="font-serif text-[32px] font-normal">
-              {mode === 'new' ? 'Create Post' : (form.title || 'Edit Post')}
-            </h1>
-          </div>
-          <a href="/admin" className="font-mono text-[11px] text-text-muted no-underline hover:text-text transition-colors">← Back</a>
+    <Layout>
+      <div className="admin-head">
+        <div>
+          <p className="t-meta">
+            <span className="t-prompt">$&nbsp;</span>vim {form.slug ? `posts/${form.slug}.md` : 'posts/_new.md'}
+          </p>
+          <h1 className="t-h1" style={{ marginTop: 'var(--s-2)' }}>
+            {mode === 'new' ? 'new post' : (form.title || 'edit post')}
+          </h1>
         </div>
+        <Link href="/admin" className="btn">[ ← back ]</Link>
+      </div>
 
-        {/* Form */}
-        <div className="flex flex-col gap-6">
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className={labelClass}>Title</label>
-              <input className={inputClass} placeholder="Post title" value={form.title} onChange={handleTitleChange} />
-            </div>
-            <div>
-              <label className={labelClass}>Slug</label>
-              <input className={inputClass} placeholder="post-slug" value={form.slug} onChange={e => setForm(f => ({ ...f, slug: e.target.value }))} />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-[3fr_1fr] gap-4">
-            <div>
-              <label className={labelClass}>Excerpt</label>
-              <input className={inputClass} placeholder="Short description shown on listing page" value={form.excerpt ?? ''} onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))} />
-            </div>
-            <div>
-              <label className={labelClass}>Tag</label>
-              <input className={inputClass} placeholder="build log" value={form.tag ?? ''} onChange={e => setForm(f => ({ ...f, tag: e.target.value }))} />
-            </div>
-          </div>
-
+      <div className="form">
+        <div className="form-row two">
           <div>
-            <label className={labelClass}>Content (Markdown)</label>
-            <textarea
-              className={`${inputClass} font-mono text-[13px] leading-[1.7] resize-y min-h-[480px]`}
-              placeholder="Write in Markdown..."
-              value={form.content}
-              onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+            <label className="form-label" htmlFor="title">title</label>
+            <input
+              id="title"
+              className="input"
+              placeholder="post title"
+              value={form.title}
+              onChange={handleTitleChange}
             />
           </div>
-
-          {error && (
-            <p className="font-mono text-xs text-red-400">{error}</p>
-          )}
-
-          {/* Actions */}
-          <div className="flex justify-between items-center pt-2">
-            <div className="flex gap-3">
-              <button
-                onClick={() => handleSubmit(false)}
-                disabled={saving}
-                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-transparent text-text-muted border border-border rounded cursor-pointer hover:text-text hover:border-border-hover transition-colors disabled:opacity-50"
-              >
-                {saving ? 'Saving...' : 'Save Draft'}
-              </button>
-              <button
-                onClick={() => handleSubmit(true)}
-                disabled={saving}
-                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-accent text-bg border-none rounded cursor-pointer font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
-              >
-                {saving ? 'Publishing...' : 'Publish'}
-              </button>
-            </div>
-
-            {mode === 'edit' && (
-              <button
-                onClick={handleDelete}
-                className="font-mono text-xs tracking-[0.08em] uppercase px-6 py-3 bg-transparent text-red-400 border border-red-400/30 rounded cursor-pointer hover:border-red-400/60 transition-colors"
-              >
-                Delete Post
-              </button>
-            )}
+          <div>
+            <label className="form-label" htmlFor="slug">slug</label>
+            <input
+              id="slug"
+              className="input"
+              placeholder="post-slug"
+              value={form.slug}
+              onChange={e => setForm(f => ({ ...f, slug: e.target.value }))}
+            />
           </div>
         </div>
+
+        <div className="form-row three-one">
+          <div>
+            <label className="form-label" htmlFor="excerpt">excerpt</label>
+            <input
+              id="excerpt"
+              className="input"
+              placeholder="short description shown on listing"
+              value={form.excerpt ?? ''}
+              onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))}
+            />
+          </div>
+          <div>
+            <label className="form-label" htmlFor="tag">tag</label>
+            <input
+              id="tag"
+              className="input"
+              placeholder="build / deep / career / fullstack"
+              value={form.tag ?? ''}
+              onChange={e => setForm(f => ({ ...f, tag: e.target.value }))}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="form-label" htmlFor="content">content (markdown)</label>
+          <textarea
+            id="content"
+            className="input"
+            placeholder="write in markdown..."
+            value={form.content}
+            onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
+            style={{ minHeight: 480, resize: 'vertical', fontSize: 'var(--fs-sm)', lineHeight: 1.7 }}
+          />
+        </div>
+
+        {error && (
+          <p className="t-meta" style={{ color: 'var(--err)' }}>
+            <span className="t-prompt">!&nbsp;</span>{error}
+          </p>
+        )}
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 'var(--s-3)', flexWrap: 'wrap', marginTop: 'var(--s-3)' }}>
+          <div style={{ display: 'flex', gap: 'var(--s-2)' }}>
+            <button onClick={() => handleSubmit(false)} disabled={saving} className="btn">
+              {saving ? '[ saving... ]' : '[ save draft ]'}
+            </button>
+            <button onClick={() => handleSubmit(true)} disabled={saving} className="btn btn-primary">
+              {saving ? '[ publishing... ]' : '[ publish ]'}
+            </button>
+          </div>
+          {mode === 'edit' && (
+            <button onClick={handleDelete} className="btn" style={{ color: 'var(--err)', borderColor: 'var(--err)' }}>
+              [ delete post ]
+            </button>
+          )}
+        </div>
       </div>
-    </main>
+    </Layout>
   )
 }

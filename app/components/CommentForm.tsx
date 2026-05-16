@@ -13,7 +13,6 @@ export default function CommentForm({ slug }: { slug: string }) {
     e.preventDefault()
     setLoading(true)
     setError(null)
-
     try {
       const res = await fetch('/api/comments', {
         method: 'POST',
@@ -23,7 +22,7 @@ export default function CommentForm({ slug }: { slug: string }) {
       if (!res.ok) throw new Error()
       setSubmitted(true)
     } catch {
-      setError('Failed to submit comment. Please try again.')
+      setError('failed to submit. try again.')
     } finally {
       setLoading(false)
     }
@@ -31,41 +30,52 @@ export default function CommentForm({ slug }: { slug: string }) {
 
   if (submitted) {
     return (
-      <p className="text-sm text-text-muted mt-6">
-        Comment submitted. It will appear after review.
+      <p className="t-meta" style={{ marginTop: 'var(--s-5)' }}>
+        <span className="t-prompt">$&nbsp;</span>echo "thanks" — comment queued for review.
       </p>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-      <h3 className="text-sm font-mono text-text-dim uppercase tracking-wider">Leave a comment</h3>
-      <input
-        type="text"
-        placeholder="Name"
-        value={author}
-        onChange={(e) => setAuthor(e.target.value)}
-        required
-        className="w-full bg-bg-card border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors"
-      />
-      <textarea
-        placeholder="Your comment"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        required
-        rows={4}
-        className="w-full bg-bg-card border border-border rounded-lg px-4 py-2.5 text-sm text-text placeholder:text-text-dim focus:outline-none focus:border-accent transition-colors resize-none"
-      />
+    <form onSubmit={handleSubmit} className="form" style={{ marginTop: 'var(--s-6)' }}>
+      <p className="t-meta">
+        <span className="t-prompt">$&nbsp;</span>leave a comment
+      </p>
+      <div>
+        <label className="form-label" htmlFor="author">name</label>
+        <input
+          id="author"
+          type="text"
+          className="input"
+          placeholder="who's writing"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label className="form-label" htmlFor="content">comment</label>
+        <textarea
+          id="content"
+          className="input"
+          placeholder="markdown ok"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          required
+          rows={5}
+          style={{ resize: 'vertical', minHeight: 120 }}
+        />
+      </div>
       {error && (
-        <p className="text-sm text-red-400">{error}</p>
+        <p className="t-meta" style={{ color: 'var(--err)' }}>
+          <span className="t-prompt">!&nbsp;</span>{error}
+        </p>
       )}
-      <button
-        type="submit"
-        disabled={loading}
-        className="bg-accent text-bg font-mono text-sm font-semibold px-5 py-2.5 rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
-      >
-        {loading ? 'Submitting...' : 'Submit'}
-      </button>
+      <div>
+        <button type="submit" disabled={loading} className="btn btn-primary">
+          {loading ? '[ submitting... ]' : '[ submit ]'}
+        </button>
+      </div>
     </form>
   )
 }

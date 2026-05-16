@@ -4,6 +4,10 @@ import { useState } from 'react'
 
 type Comment = { id: number; author: string; content: string; postSlug: string; createdAt: string }
 
+function fmtDate(s: string) {
+  return new Date(s).toISOString().slice(0, 10)
+}
+
 export default function ModerationClient({ initialComments }: { initialComments: Comment[] }) {
   const [comments, setComments] = useState(initialComments)
 
@@ -19,42 +23,30 @@ export default function ModerationClient({ initialComments }: { initialComments:
 
   if (comments.length === 0) {
     return (
-      <div className="bg-bg-card border border-border p-10 text-center font-mono text-[13px] text-text-muted">
-        No pending comments.
-      </div>
+      <p className="t-meta" style={{ padding: 'var(--s-5) 0' }}>
+        <span className="t-prompt">$&nbsp;</span>queue empty. inbox zero.
+      </p>
     )
   }
 
   return (
-    <div className="flex flex-col gap-px bg-border border border-border">
+    <ul className="comments-list" style={{ borderTop: '1px dashed var(--border)' }}>
       {comments.map((c) => (
-        <div key={c.id} className="bg-bg px-7 py-5 flex items-start justify-between gap-6">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="font-mono text-[11px] text-accent">{c.author}</span>
-              <span className="font-mono text-[10px] text-text-muted">on {c.postSlug}</span>
-              <span className="font-mono text-[10px] text-text-muted">
-                {new Date(c.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
-              </span>
+        <li key={c.id} className="comment" style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--s-4)', alignItems: 'flex-start' }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="comment-head">
+              <span className="comment-author">{c.author}</span>
+              <span className="t-meta">on /blog/{c.postSlug}</span>
+              <span className="comment-date">{fmtDate(c.createdAt)}</span>
             </div>
-            <p className="text-sm text-text-muted leading-6">{c.content}</p>
+            <p className="comment-body">{c.content}</p>
           </div>
-          <div className="flex gap-2 shrink-0 pt-1">
-            <button
-              onClick={() => approve(c.id)}
-              className="font-mono text-[11px] tracking-[0.06em] uppercase px-4 py-2 bg-accent text-bg rounded cursor-pointer font-medium hover:opacity-90 transition-opacity"
-            >
-              Approve
-            </button>
-            <button
-              onClick={() => remove(c.id)}
-              className="font-mono text-[11px] tracking-[0.06em] uppercase px-4 py-2 bg-transparent text-text-muted border border-border rounded cursor-pointer hover:text-text hover:border-border-hover transition-colors"
-            >
-              Delete
-            </button>
+          <div style={{ display: 'flex', gap: 'var(--s-2)', flexShrink: 0 }}>
+            <button onClick={() => approve(c.id)} className="btn btn-primary">[ approve ]</button>
+            <button onClick={() => remove(c.id)} className="btn">[ delete ]</button>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ul>
   )
 }
