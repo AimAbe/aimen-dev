@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import ThemeToggle from './ThemeToggle'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,8 +12,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </Link>
           <nav className="hdr-nav">
             <Link href="/" className="hdr-link">./posts</Link>
+            <Link href="/about" className="hdr-link">./about</Link>
             <a href="/feed.xml" className="hdr-link">./feed.xml</a>
             <a href="https://github.com/AimAbe" className="hdr-link">github</a>
+            <ThemeToggle />
           </nav>
         </div>
       </header>
