@@ -47,10 +47,9 @@ export default async function HomePage() {
         <h2 className="t-h3">DESCRIPTION</h2>
         <div className="indent">
           <p className="t-body">
-            full-stack developer. notes from a self-taught builder shipping side
-            projects no one asked for. long-form posts on what i build, what i break,
-            and what i learn doing it. new posts roughly twice a month. no schedule.
-            no newsletter (yet).
+            enterprise analyst, learning my way deeper into backend development and 
+            devops. work on side projects, document what i learn, and share occasional
+            long-form posts about the process. new posts whenever. no schedule.
           </p>
         </div>
       </section>
@@ -96,8 +95,8 @@ export default async function HomePage() {
           <p className="t-body">
             <a href="https://github.com/AimAbe" className="t-link">github.com/aimabe</a>
             <span className="t-mute2">  ·  </span>
-            <a href="/feed.xml" className="t-link">/feed.xml</a>
-            <span className="t-mute2">  ·  </span>
+            <!-- <a href="/feed.xml" className="t-link">/feed.xml</a>
+            <span className="t-mute2">  ·  </span> -->
             <a href="mailto:aimen.aberra@gmail.com" className="t-link">aimen.aberra@gmail.com</a>
           </p>
         </div>
