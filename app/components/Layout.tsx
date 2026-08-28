@@ -31,8 +31,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <span className="t-meta">
             <a href="https://github.com/AimAbe" className="ftr-link">github</a>
             <span className="t-mute2"> · </span>
-            <a href="/feed.xml" className="ftr-link">rss</a>
-            <span className="t-mute2"> · </span>
             <a href="mailto:aimen.aberra@gmail.com" className="ftr-link">email</a>
           </span>
         </div>
