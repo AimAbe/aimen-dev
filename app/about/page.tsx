@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <Layout>
-      <pre className="manpage-banner">AIMEN(1)                                                              AIMEN(1)</pre>
+      <pre className="manpage-banner">AIMEN(1)                                                              ABOUT(1)</pre>
 
       <section className="man-section">
         <h2 className="t-h3">NAME</h2>
@@ -31,10 +31,6 @@ export default function AboutPage() {
       <section className="man-section">
         <h2 className="t-h3">DESCRIPTION</h2>
         <div className="indent" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--s-4)' }}>
-          <p className="t-body">
-            i write and ship software for fun and (occasionally) profit. mostly web: react,
-            next.js, node, postgres. the stack changes; the habit of building things doesn't.
-          </p>
           <p className="t-body">
             this site is a notebook. long-form posts on what i build, what i break, and what
             i learn doing it. no hot takes. no listicles. notes i would have wanted to find
@@ -79,8 +75,8 @@ export default function AboutPage() {
             <a href="https://github.com/AimAbe" className="t-link">github.com/aimabe</a>
             <span className="t-mute2">  ·  </span>
             <a href="mailto:aimen.aberra@gmail.com" className="t-link">aimen.aberra@gmail.com</a>
-            <span className="t-mute2">  ·  </span>
-            <a href="/feed.xml" className="t-link">/feed.xml</a>
+            <!--<span className="t-mute2">  ·  </span>
+            <a href="/feed.xml" className="t-link">/feed.xml</a>-->
           </p>
         </div>
       </section>
