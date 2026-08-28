@@ -75,8 +75,6 @@ export default function AboutPage() {
             <a href="https://github.com/AimAbe" className="t-link">github.com/aimabe</a>
             <span className="t-mute2">  ·  </span>
             <a href="mailto:aimen.aberra@gmail.com" className="t-link">aimen.aberra@gmail.com</a>
-            <!--<span className="t-mute2">  ·  </span>
-            <a href="/feed.xml" className="t-link">/feed.xml</a>-->
           </p>
         </div>
       </section>
