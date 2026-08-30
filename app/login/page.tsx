@@ -10,6 +10,8 @@ const LOGO = String.raw`
   \__,_|_|_| |_| |_|\___|_| |_(_)__,_|\___| \_/
 `
 
+export const dynamic = 'force-dynamic'
+
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
