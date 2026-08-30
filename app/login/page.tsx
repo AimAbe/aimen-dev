@@ -1,6 +1,6 @@
 'use client'
 
-import { signIn } from '@/lib/auth'
+import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 
 const LOGO = String.raw`
@@ -9,8 +9,6 @@ const LOGO = String.raw`
  | (_| | | | | | | |  __/ | | || (_| |  __/\ V /
   \__,_|_|_| |_| |_|\___|_| |_(_)__,_|\___| \_/
 `
-
-export const dynamic = 'force-dynamic'
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
