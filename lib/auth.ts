@@ -2,7 +2,16 @@ import NextAuth from 'next-auth'
 import GitHub from 'next-auth/providers/github'
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [GitHub],
+  providers: [
+    GitHub({
+      // GitHub added an `iss` parameter to its OAuth authorization response,
+      // which Auth.js validates against the provider's configured issuer.
+      // The built-in GitHub provider doesn't set one, so it fails closed with
+      // "unexpected iss (issuer) response parameter value" unless we set it
+      // explicitly. See: https://github.com/nextauthjs/next-auth/issues/13409
+      issuer: 'https://github.com/login/oauth',
+    }),
+  ],
   callbacks: {
     signIn({ profile }) {
       // Validate ADMIN_EMAIL is configured
