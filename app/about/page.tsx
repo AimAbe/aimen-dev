@@ -37,7 +37,7 @@ export default function AboutPage() {
             when i was stuck.
           </p>
           <p className="t-body">
-            self-taught. still learning. new content whenever—no set schedule — no schedule.
+            self-taught. still learning. new content whenever. no set schedule.
           </p>
         </div>
       </section>
