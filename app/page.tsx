@@ -30,26 +30,14 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* SYNOPSIS */}
-      <section className="man-section">
-        <h2 className="t-h3">SYNOPSIS</h2>
-        <div className="indent">
-          <p className="t-body">
-            <span className="t-prompt">$&nbsp;</span>
-            aimen <span className="t-mute">--topic</span> [build|deep|career|fullstack]
-            {' '}<span className="t-mute">--month</span> [yyyy-mm]
-          </p>
-        </div>
-      </section>
-
       {/* DESCRIPTION */}
       <section className="man-section">
         <h2 className="t-h3">DESCRIPTION</h2>
         <div className="indent">
           <p className="t-body">
-            enterprise analyst, learning my way deeper into backend development and 
-            devops. work on side projects, document what i learn, and share occasional
-            long-form posts about the process. new posts whenever. no schedule.
+            enterprise analyst growing into backend development and devops. building
+            side projects, documenting the learning, and occasionally sharing long-form 
+            posts on the process. new content whenever—no set schedule.
           </p>
         </div>
       </section>
