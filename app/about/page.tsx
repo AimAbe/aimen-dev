@@ -14,7 +14,7 @@ export default function AboutPage() {
       <section className="man-section">
         <h2 className="t-h3">NAME</h2>
         <div className="indent">
-          <p className="t-body">aimen aberra — full-stack developer, self-taught builder.</p>
+          <p className="t-body">aimen aberra — backend developer, self-taught builder.</p>
         </div>
       </section>
 
@@ -37,8 +37,7 @@ export default function AboutPage() {
             when i was stuck.
           </p>
           <p className="t-body">
-            self-taught. still learning. new posts roughly twice a month — no schedule,
-            no newsletter (yet).
+            self-taught. still learning. new content whenever—no set schedule — no schedule.
           </p>
         </div>
       </section>
