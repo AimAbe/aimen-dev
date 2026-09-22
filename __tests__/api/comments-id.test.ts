@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
+vi.mock('@/lib/csrf', () => ({ validateOrigin: vi.fn().mockReturnValue(true) }))
+
 vi.mock('@/lib/db', () => ({
   prisma: {
     comment: {

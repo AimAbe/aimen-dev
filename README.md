@@ -42,8 +42,10 @@ aimen-dev/
 │   │   ├── new/page.tsx
 │   │   └── page.tsx
 │   ├── api/
+│   │   ├── admin/comments/route.ts
 │   │   ├── auth/[...nextauth]/route.ts
 │   │   ├── comments/route.ts
+│   │   ├── comments/[id]/route.ts
 │   │   ├── posts/route.ts
 │   │   ├── posts/[slug]/route.ts
 │   │   ├── reactions/route.ts
@@ -51,6 +53,7 @@ aimen-dev/
 │   ├── blog/
 │   │   ├── [slug]/page.tsx   ← individual post
 │   │   └── page.tsx          ← redirects to /
+│   ├── about/page.tsx
 │   ├── components/
 │   │   ├── CommentForm.tsx
 │   │   ├── CommentsDisplay.tsx
@@ -147,6 +150,7 @@ Key routes:
 
 - Admin access is gated by GitHub OAuth — only the configured `ADMIN_EMAIL` can sign in.
 - `proxy.ts` at the project root enforces auth on all `/admin/*` routes (Next.js 16 middleware convention).
+- All mutating API routes (`posts`, `comments`, `comments/[id]`) validate the request's `Origin` header against `Host` (`lib/csrf.ts`) as CSRF protection, in addition to the session check.
 - Comments are created unapproved and require manual approval via the admin moderation UI.
 - Reactions use an `httpOnly` session cookie to prevent duplicate votes per browser.
 - Draft posts are only accessible to authenticated admins — unauthenticated requests receive 404.
