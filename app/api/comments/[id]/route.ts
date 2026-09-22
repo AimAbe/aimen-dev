@@ -1,7 +1,10 @@
 import { prisma } from '@/lib/db'
 import { auth } from '@/lib/auth'
+import { validateOrigin } from '@/lib/csrf'
 
 export async function PATCH(req: Request, context: { params: Promise<{ id: string }> }) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const session = await auth()
   if (!session) return new Response('Unauthorized', { status: 401 })
 
@@ -13,7 +16,9 @@ export async function PATCH(req: Request, context: { params: Promise<{ id: strin
   return Response.json(comment)
 }
 
-export async function DELETE(_req: Request, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
+  if (!validateOrigin(req)) return new Response('Forbidden', { status: 403 })
+
   const session = await auth()
   if (!session) return new Response('Unauthorized', { status: 401 })
 
