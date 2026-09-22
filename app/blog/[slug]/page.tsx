@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/db'
+import { prisma, withDbRetry } from '@/lib/db'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeSanitize from 'rehype-sanitize'
@@ -13,10 +13,12 @@ import Layout from '@/app/components/Layout'
 export const revalidate = 60
 
 export async function generateStaticParams() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    select: { slug: true },
-  })
+  const posts = await withDbRetry(() =>
+    prisma.post.findMany({
+      where: { published: true },
+      select: { slug: true },
+    })
+  )
   return posts.map((p) => ({ slug: p.slug }))
 }
 
@@ -27,17 +29,19 @@ function fmtDate(d: Date) {
 export default async function PostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
 
-  const post = await prisma.post.findFirst({
-    where: { slug, published: true },
-    select: {
-      id: true,
-      title: true,
-      content: true,
-      excerpt: true,
-      tag: true,
-      createdAt: true,
-    },
-  })
+  const post = await withDbRetry(() =>
+    prisma.post.findFirst({
+      where: { slug, published: true },
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        excerpt: true,
+        tag: true,
+        createdAt: true,
+      },
+    })
+  )
 
   if (!post) notFound()
 

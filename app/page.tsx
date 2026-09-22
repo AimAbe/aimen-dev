@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { prisma } from '@/lib/db'
+import { prisma, withDbRetry } from '@/lib/db'
 import Layout from '@/app/components/Layout'
 import Search from '@/app/components/Search'
 
@@ -10,12 +10,14 @@ function fmtDate(d: Date) {
 }
 
 export default async function HomePage() {
-  const posts = await prisma.post.findMany({
-    where: { published: true },
-    orderBy: { createdAt: 'desc' },
-    take: 10,
-    select: { slug: true, title: true, excerpt: true, tag: true, createdAt: true },
-  })
+  const posts = await withDbRetry(() =>
+    prisma.post.findMany({
+      where: { published: true },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      select: { slug: true, title: true, excerpt: true, tag: true, createdAt: true },
+    })
+  )
 
   return (
     <Layout>
