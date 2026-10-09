@@ -3,10 +3,7 @@ import { useState, useEffect } from 'react'
 
 const EMOJIS = ['❤️', '🔥', '🤔', '👏', '💡']
 
-type ReactionCount = {
-  emoji: string
-  _count: number
-}
+type ReactionCount = { emoji: string; _count: number }
 
 export default function Reactions({ postId }: { postId: number }) {
   const [reactions, setReactions] = useState<ReactionCount[]>([])
@@ -15,7 +12,7 @@ export default function Reactions({ postId }: { postId: number }) {
 
   useEffect(() => {
     fetch(`/api/reactions?postId=${postId}`)
-      .then(r => r.ok ? r.json() : Promise.reject())
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then(setReactions)
       .catch(() => {})
   }, [postId])
@@ -27,25 +24,23 @@ export default function Reactions({ postId }: { postId: number }) {
       const res = await fetch('/api/reactions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ postId, emoji })
+        body: JSON.stringify({ postId, emoji }),
       })
       if (!res.ok) throw new Error()
-      const updated = await res.json()
-      setReactions(updated)
-      setReacted(prev => [...prev, emoji])
+      setReactions(await res.json())
+      setReacted((prev) => [...prev, emoji])
     } catch {
-      // silent
+      // reaction failed silently — counts stay unchanged
     } finally {
       setLoading(false)
     }
   }
 
-  const getCount = (emoji: string) =>
-    reactions.find(r => r.emoji === emoji)?._count ?? 0
+  const getCount = (emoji: string) => reactions.find((r) => r.emoji === emoji)?._count ?? 0
 
   return (
     <div className="reactions">
-      {EMOJIS.map(emoji => {
+      {EMOJIS.map((emoji) => {
         const active = reacted.includes(emoji)
         const count = getCount(emoji)
         return (
@@ -53,11 +48,10 @@ export default function Reactions({ postId }: { postId: number }) {
             key={emoji}
             onClick={() => handleReact(emoji)}
             disabled={active}
-            className={`reaction ${active ? 'is-on' : ''}`}
-            aria-label={`react with ${emoji}`}
+            className={`reaction${active ? ' is-on' : ''}`}
           >
             <span>{emoji}</span>
-            {count > 0 && <span className="count">{count}</span>}
+            {count > 0 && <span>{count}</span>}
           </button>
         )
       })}

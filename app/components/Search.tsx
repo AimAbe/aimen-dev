@@ -32,9 +32,7 @@ export default function Search() {
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
     }
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
@@ -42,37 +40,25 @@ export default function Search() {
 
   return (
     <div ref={ref} className="search">
-      <span className="search-prompt" aria-hidden="true">$&nbsp;</span>
       <input
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="grep posts/..."
-        className="input search-input"
-        aria-label="search posts"
+        placeholder="Search posts…"
+        aria-label="Search posts"
+        className="field"
       />
       {open && (
-        <div className="search-drop">
-          {loading && (
-            <p className="empty">
-              <span className="t-prompt">…&nbsp;</span>searching
-            </p>
-          )}
-          {!loading && results.length === 0 && (
-            <p className="empty">
-              <span className="t-prompt">!&nbsp;</span>no results for "{query}"
-            </p>
-          )}
+        <div className="search-results">
+          {loading && [1, 2, 3].map((i) => <div key={i} className="search-skeleton" />)}
+          {!loading && results.length === 0 && <p>No results for &quot;{query}&quot;</p>}
           {!loading && results.length > 0 && (
             <ul>
               {results.map((r) => (
                 <li key={r.slug}>
                   <Link href={`/blog/${r.slug}`} onClick={() => setOpen(false)}>
-                    <div className="row">
-                      <span className="name">{r.title}</span>
-                      {r.tag && <span className="t-tag">[{r.tag.toLowerCase()}]</span>}
-                    </div>
-                    {r.excerpt && <div className="ex">{r.excerpt}</div>}
+                    {r.title}
+                    {r.tag && <span>{r.tag}</span>}
                   </Link>
                 </li>
               ))}

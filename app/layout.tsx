@@ -4,23 +4,23 @@ import { Providers } from './providers'
 
 export const metadata: Metadata = {
   title: 'aimen.dev',
-  description: 'notes from a developer who keeps shipping side projects no one asked for.',
+  description: 'Developer blog by Aimen Aberra',
+  // The site has its own light/dark themes; stop Dark Reader from recoloring them
+  other: { 'darkreader-lock': 'true' },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+// Apply stored theme before first paint to avoid a flash
+const themeScript = `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}`
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        {/* Apply stored theme before first paint to avoid flash */}
-        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap"
           rel="stylesheet"
         />
       </head>

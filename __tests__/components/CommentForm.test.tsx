@@ -12,18 +12,18 @@ describe('CommentForm', () => {
   it('renders the form with name and comment fields', () => {
     render(<CommentForm slug="test-post" />)
 
-    expect(screen.getByPlaceholderText("who's writing")).toBeInTheDocument()
-    expect(screen.getByPlaceholderText('markdown ok')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '[ submit ]' })).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Name')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('Your comment')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument()
   })
 
   it('submits the form with correct data', async () => {
     const user = userEvent.setup()
     render(<CommentForm slug="my-post" />)
 
-    await user.type(screen.getByPlaceholderText("who's writing"), 'Alice')
-    await user.type(screen.getByPlaceholderText('markdown ok'), 'Great post!')
-    await user.click(screen.getByRole('button', { name: '[ submit ]' }))
+    await user.type(screen.getByPlaceholderText('Name'), 'Alice')
+    await user.type(screen.getByPlaceholderText('Your comment'), 'Great post!')
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
 
     await waitFor(() => {
       expect(global.fetch).toHaveBeenCalledWith('/api/comments', {
@@ -38,12 +38,12 @@ describe('CommentForm', () => {
     const user = userEvent.setup()
     render(<CommentForm slug="test" />)
 
-    await user.type(screen.getByPlaceholderText("who's writing"), 'Alice')
-    await user.type(screen.getByPlaceholderText('markdown ok'), 'Nice')
-    await user.click(screen.getByRole('button', { name: '[ submit ]' }))
+    await user.type(screen.getByPlaceholderText('Name'), 'Alice')
+    await user.type(screen.getByPlaceholderText('Your comment'), 'Nice')
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
 
     await waitFor(() => {
-      expect(screen.getByText(/comment queued/i)).toBeInTheDocument()
+      expect(screen.getByText(/comment submitted/i)).toBeInTheDocument()
     })
   })
 
@@ -56,11 +56,11 @@ describe('CommentForm', () => {
     const user = userEvent.setup()
     render(<CommentForm slug="test" />)
 
-    await user.type(screen.getByPlaceholderText("who's writing"), 'Bob')
-    await user.type(screen.getByPlaceholderText('markdown ok'), 'Hello')
-    await user.click(screen.getByRole('button', { name: '[ submit ]' }))
+    await user.type(screen.getByPlaceholderText('Name'), 'Bob')
+    await user.type(screen.getByPlaceholderText('Your comment'), 'Hello')
+    await user.click(screen.getByRole('button', { name: 'Submit' }))
 
-    expect(screen.getByRole('button', { name: '[ submitting... ]' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: 'Submitting...' })).toBeDisabled()
 
     // Resolve the fetch
     await waitFor(() => resolveSubmit!())
