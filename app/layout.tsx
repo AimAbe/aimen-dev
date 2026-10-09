@@ -5,6 +5,8 @@ import { Providers } from './providers'
 export const metadata: Metadata = {
   title: 'aimen.dev',
   description: 'Developer blog by Aimen Aberra',
+  // The site has its own light/dark themes; stop Dark Reader from recoloring them
+  other: { 'darkreader-lock': 'true' },
 }
 
 // Apply stored theme before first paint to avoid a flash
@@ -14,8 +16,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        {/* The site has its own light/dark themes; stop Dark Reader from recoloring them */}
-        <meta name="darkreader-lock" />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
