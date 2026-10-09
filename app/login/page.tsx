@@ -3,13 +3,6 @@
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
 
-const LOGO = String.raw`
-   __ _(_)_ __ ___   ___ _ __    __| | _____   __
-  / _\` | | '_ \` _ \ / _ \ '_ \  / _\` |/ _ \ \ / /
- | (_| | | | | | | |  __/ | | || (_| |  __/\ V /
-  \__,_|_|_| |_| |_|\___|_| |_(_)__,_|\___| \_/
-`
-
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -32,72 +25,26 @@ export default function LoginPage() {
   }
 
   return (
-    <div
-      style={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: 'var(--bg)',
-        padding: 'var(--s-4)',
-      }}
-    >
-      <div style={{ maxWidth: 480, width: '100%' }}>
-        <pre className="ascii-logo">{LOGO}</pre>
-
-        <p className="t-meta" style={{ marginBottom: 'var(--s-4)' }}>
-          <span className="t-prompt">$&nbsp;</span>sudo login --admin
-        </p>
-
-        <hr className="hr-rule" />
-
-        <p className="t-body" style={{ marginBottom: 'var(--s-5)' }}>
-          restricted access. github oauth — only the configured admin email may sign in.
-        </p>
-
+    <div className="login">
+      <div className="login-card">
+        <p className="logo">aimen<span>.dev</span></p>
+        <h1>Admin sign in</h1>
+        <p className="login-note">Only the configured admin account can sign in.</p>
         {error && (
-          <div
-            style={{
-              padding: 'var(--s-3)',
-              marginBottom: 'var(--s-4)',
-              background: 'rgba(255, 0, 0, 0.1)',
-              border: '1px solid rgba(255, 0, 0, 0.3)',
-              borderRadius: '4px',
-              color: '#ff4444',
-            }}
-          >
-            <p className="t-body" style={{ margin: 0 }}>
-              {error}
-            </p>
-            <p className="t-meta" style={{ margin: '8px 0 0 0', color: '#ff6666' }}>
-              <span className="t-mute2">// </span>Check that your GitHub email is public and
-              matches the admin email.
-            </p>
-          </div>
+          <p className="form-error" role="alert" style={{ marginBottom: 20 }}>
+            {error} Check that your GitHub email is public and matches the admin email.
+          </p>
         )}
-
         <form
           onSubmit={(e) => {
             e.preventDefault()
             handleSignIn()
           }}
         >
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={loading}
-            style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
-          >
-            {loading ? '[ signing in... ]' : '[ sign in with github ]'}
+          <button type="submit" className="btn-primary" disabled={loading}>
+            {loading ? 'Signing in...' : 'Sign in with GitHub'}
           </button>
         </form>
-
-        <p className="t-meta" style={{ marginTop: 'var(--s-5)' }}>
-          <span className="t-mute2">// </span>everyone else: nothing to see here.{' '}
-          <a href="/" className="t-link">
-            cd /
-          </a>
-        </p>
       </div>
     </div>
   )

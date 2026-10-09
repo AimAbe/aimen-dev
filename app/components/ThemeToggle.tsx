@@ -2,26 +2,26 @@
 
 import { useEffect, useState } from 'react'
 
+type Theme = 'dark' | 'light'
+
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [theme, setTheme] = useState<Theme>('dark')
 
   useEffect(() => {
-    const stored = localStorage.getItem('theme') as 'dark' | 'light' | null
-    const initial = stored ?? 'dark'
-    setTheme(initial)
-    document.documentElement.dataset.theme = initial
+    setTheme(document.documentElement.dataset.theme === 'light' ? 'light' : 'dark')
   }, [])
 
   function toggle() {
-    const next = theme === 'dark' ? 'light' : 'dark'
-    setTheme(next)
+    const next: Theme = theme === 'dark' ? 'light' : 'dark'
     document.documentElement.dataset.theme = next
-    localStorage.setItem('theme', next)
+    try { localStorage.setItem('theme', next) } catch {}
+    setTheme(next)
   }
 
+  const label = theme === 'dark' ? 'Light' : 'Dark'
   return (
-    <button onClick={toggle} className="hdr-link" aria-label="toggle theme">
-      [{theme === 'dark' ? 'light' : 'dark'}]
+    <button type="button" onClick={toggle} className="theme-btn" aria-label={`Switch to ${label.toLowerCase()} mode`}>
+      {label}
     </button>
   )
 }
