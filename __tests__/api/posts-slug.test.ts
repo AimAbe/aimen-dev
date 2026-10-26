@@ -56,7 +56,7 @@ describe('PATCH /api/posts/[slug]', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const req = new Request('http://localhost/api/posts/test', {
       method: 'PATCH',
@@ -90,7 +90,7 @@ describe('DELETE /api/posts/[slug]', () => {
   beforeEach(() => vi.clearAllMocks())
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const req = new Request('http://localhost/api/posts/test', { method: 'DELETE' })
     const response = await DELETE(req, makeParams('test'))

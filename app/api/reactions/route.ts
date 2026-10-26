@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { validateOrigin } from '@/lib/csrf'
+import { REACTION_EMOJIS } from '@/lib/reactions'
 
 // GET /api/reactions?postId=123
 export async function GET(req: Request) {
@@ -29,6 +30,13 @@ export async function POST(req: Request) {
   const body = await req.json()
   const { postId, emoji } = body
 
+  if (!Number.isInteger(postId) || postId < 1) {
+    return NextResponse.json({ error: 'Invalid postId' }, { status: 400 })
+  }
+  if (!REACTION_EMOJIS.includes(emoji)) {
+    return NextResponse.json({ error: 'Invalid emoji' }, { status: 400 })
+  }
+
   if (!sessionId) sessionId = crypto.randomUUID()
 
   try {
@@ -48,6 +56,8 @@ export async function POST(req: Request) {
   const response = NextResponse.json(reactions)
   response.cookies.set('session_id', sessionId, {
     httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
     maxAge: 60 * 60 * 24 * 365, // 1 year
     path: '/'
   })

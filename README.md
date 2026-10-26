@@ -22,11 +22,12 @@ Personal developer blog built with Next.js, Prisma, and GitHub-authenticated adm
 
 - Minimal homepage that doubles as the post listing, with live search
 - Markdown posts rendered with `react-markdown` (HTML sanitized via `rehype-sanitize`)
-- Emoji reactions persisted per browser session
+- Emoji reactions persisted per browser session (fixed emoji allowlist)
 - Comments with moderation workflow
 - Admin dashboard for creating, editing, and publishing posts
 - GitHub login restricted to a configured admin email
 - Admin routes protected by Next.js middleware (`proxy.ts`)
+- Light/dark theme toggle, remembered in `localStorage`
 
 ---
 
@@ -61,22 +62,31 @@ aimen-dev/
 │   │   ├── ModerationClient.tsx
 │   │   ├── PostNav.tsx
 │   │   ├── Reactions.tsx
-│   │   └── Search.tsx
+│   │   ├── Search.tsx
+│   │   └── ThemeToggle.tsx
 │   ├── login/page.tsx
 │   ├── globals.css
 │   ├── layout.tsx
-│   └── page.tsx              ← homepage + post listing
+│   ├── page.tsx              ← homepage + post listing
+│   └── providers.tsx         ← NextAuth SessionProvider
+├── __tests__/                ← Vitest suites (api/, components/, lib/)
+├── docs/
+│   └── AUTH_REVIEW.md        ← auth flow review & troubleshooting
 ├── lib/
 │   ├── auth.ts
 │   ├── csrf.ts
-│   ├── db.ts
+│   ├── db.ts                 ← Prisma client + build-time retry helper
 │   ├── getAdjacentPosts.ts
+│   ├── reactions.ts          ← allowed reaction emojis
 │   └── useDebounce.ts
 ├── prisma/
 │   ├── schema.prisma
 │   └── seed.ts
+├── production/               ← design handoff snapshot (not used by the app)
 ├── proxy.ts                  ← Next.js middleware (admin auth)
+├── prisma.config.ts
 ├── next.config.ts
+├── vitest.config.ts
 ├── package.json
 └── tsconfig.json
 ```
@@ -87,7 +97,7 @@ aimen-dev/
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 20.19+ (required by Next.js 16 and Prisma 7)
 - PostgreSQL database
 
 ### Setup
@@ -106,15 +116,17 @@ Create a `.env` file in the project root:
 DATABASE_URL=your_postgres_connection_string
 ADMIN_EMAIL=your_admin_github_email
 AUTH_SECRET=your_nextauth_secret        # generate with: npx auth secret
-GITHUB_ID=your_github_oauth_client_id
-GITHUB_SECRET=your_github_oauth_client_secret
+AUTH_GITHUB_ID=your_github_oauth_client_id
+AUTH_GITHUB_SECRET=your_github_oauth_client_secret
 ```
+
+Auth.js v5 picks up `AUTH_GITHUB_ID` / `AUTH_GITHUB_SECRET` automatically; the older `GITHUB_ID` / `GITHUB_SECRET` names are not read.
 
 ### Database Setup
 
 ```bash
 npx prisma db push
-npx tsx prisma/seed.ts
+npx prisma db seed     # runs prisma/seed.ts
 npx prisma studio      # optional: inspect data in browser
 ```
 
@@ -140,9 +152,11 @@ Key routes:
    - `DATABASE_URL`
    - `ADMIN_EMAIL`
    - `AUTH_SECRET`
-   - `GITHUB_ID`
-   - `GITHUB_SECRET`
+   - `AUTH_GITHUB_ID`
+   - `AUTH_GITHUB_SECRET`
 4. Deploy.
+
+`next build` queries the database during static generation. Build-time queries go through `withDbRetry` (`lib/db.ts`), which retries with backoff while a scale-to-zero Postgres (e.g. Railway) wakes up.
 
 ---
 
@@ -152,7 +166,7 @@ Key routes:
 - `proxy.ts` at the project root enforces auth on all `/admin/*` routes (Next.js 16 middleware convention).
 - All mutating API routes (`posts`, `comments`, `comments/[id]`) validate the request's `Origin` header against `Host` (`lib/csrf.ts`) as CSRF protection, in addition to the session check.
 - Comments are created unapproved and require manual approval via the admin moderation UI.
-- Reactions use an `httpOnly` session cookie to prevent duplicate votes per browser.
+- Reactions use an `httpOnly`, `SameSite=Lax` session cookie (`Secure` in production) to prevent duplicate votes per browser. The API rejects emojis outside the allowlist in `lib/reactions.ts` and non-integer post IDs.
 - Draft posts are only accessible to authenticated admins — unauthenticated requests receive 404.
 
 ---
@@ -162,7 +176,8 @@ Key routes:
 Tests use [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/). All external dependencies (database, auth, network) are mocked — the suite runs fully in-memory with no infrastructure required.
 
 ```bash
-npm run test
+npm run test          # single run
+npm run test:watch    # watch mode
 ```
 
 ### Coverage
@@ -172,10 +187,13 @@ npm run test
 | API — Posts | List, create, fetch, update, delete; auth guards; draft visibility |
 | API — Comments | Submit, fetch, approve, delete; input validation |
 | API — Admin | Pending comments endpoint; auth guards |
-| API — Reactions | Fetch counts, create reactions, session cookie, duplicate prevention |
+| API — Reactions | Fetch counts, create reactions, session cookie, duplicate prevention, input validation |
 | API — Search | Query validation, full-text search, result limiting |
 | Component — CommentForm | Renders, submits, loading and success states |
 | Component — ModerationClient | Pending list, approve/delete actions, empty state |
 | Component — Reactions | Emoji buttons, counts, click handling |
+| Lib — auth | Admin-only `signIn` callback (missing config, missing email, mismatch, case/whitespace) |
+| Lib — csrf | `Origin` vs `Host` validation, ports, missing/malformed headers |
+| Lib — db | `withDbRetry` backoff on cold-start errors, give-up and passthrough |
 | Lib — getAdjacentPosts | Prev/next navigation including edge cases |
 | Lib — useDebounce | Timing and rapid-change timer reset |

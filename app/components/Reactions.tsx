@@ -1,7 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-
-const EMOJIS = ['❤️', '🔥', '🤔', '👏', '💡']
+import { REACTION_EMOJIS } from '@/lib/reactions'
 
 type ReactionCount = { emoji: string; _count: number }
 
@@ -40,7 +39,7 @@ export default function Reactions({ postId }: { postId: number }) {
 
   return (
     <div className="reactions">
-      {EMOJIS.map((emoji) => {
+      {REACTION_EMOJIS.map((emoji) => {
         const active = reacted.includes(emoji)
         const count = getCount(emoji)
         return (
