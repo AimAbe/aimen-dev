@@ -65,7 +65,7 @@ describe('POST /api/posts', () => {
   })
 
   it('returns 401 when not authenticated', async () => {
-    vi.mocked(auth).mockResolvedValue(null)
+    vi.mocked(auth).mockResolvedValue(null as any)
 
     const req = new Request('http://localhost/api/posts', {
       method: 'POST',

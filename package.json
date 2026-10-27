@@ -15,10 +15,10 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@prisma/adapter-pg": "^7.6.0",
+    "@prisma/adapter-pg": "^7.10.1",
     "@tailwindcss/typography": "^0.5.19",
-    "next": "^16.2.1",
-    "next-auth": "^5.0.0-beta.30",
+    "next": "^16.4.3",
+    "next-auth": "^5.0.0-beta.32",
     "pg": "^8.20.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -27,7 +27,7 @@
     "remark-gfm": "^4.0.1"
   },
   "devDependencies": {
-    "@prisma/client": "^7.6.0",
+    "@prisma/client": "^7.10.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -38,11 +38,14 @@
     "@vitejs/plugin-react": "^6.0.1",
     "dotenv": "^17.3.1",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.4.3",
     "jsdom": "^29.0.2",
-    "prisma": "^7.6.0",
+    "prisma": "^7.10.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.12"
+  },
+  "overrides": {
+    "postcss-selector-parser": "^6.1.5"
   }
 }

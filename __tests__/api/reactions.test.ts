@@ -126,4 +126,30 @@ describe('POST /api/reactions', () => {
     const data = await response.json()
     expect(data).toEqual([{ emoji: '❤️', _count: 1 }])
   })
+
+  it('returns 400 for an emoji outside the allowlist', async () => {
+    vi.mocked(cookies).mockResolvedValue({ get: vi.fn() } as any)
+
+    const req = new Request('http://localhost/api/reactions', {
+      method: 'POST',
+      body: JSON.stringify({ postId: 1, emoji: 'x'.repeat(1000) }),
+    })
+    const response = await POST(req)
+
+    expect(response.status).toBe(400)
+    expect(prisma.reaction.create).not.toHaveBeenCalled()
+  })
+
+  it('returns 400 for a non-integer postId', async () => {
+    vi.mocked(cookies).mockResolvedValue({ get: vi.fn() } as any)
+
+    const req = new Request('http://localhost/api/reactions', {
+      method: 'POST',
+      body: JSON.stringify({ postId: '1', emoji: '❤️' }),
+    })
+    const response = await POST(req)
+
+    expect(response.status).toBe(400)
+    expect(prisma.reaction.create).not.toHaveBeenCalled()
+  })
 })
